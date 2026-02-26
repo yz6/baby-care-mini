@@ -1,0 +1,25 @@
+---
+description: uni-app 配置文件（pages/manifest/样式）修改规范
+globs: **/{pages.json,manifest.json,uni.scss}
+alwaysApply: false
+---
+
+# Config Files Rules
+
+## `pages.json`
+- 新增页面时同步配置路由、导航标题与分包策略，避免页面可访问但未被注册。
+- `tabBar` 与页面路径保持一致，修改路径时同步检查跳转调用点。
+- 底部导航使用固定信息架构：`首页 | 服务 | 共育 | 我的`。
+- 推荐 tab 路径：`pages/home/index`、`pages/service-management/index`、`pages/parent-support/index`、`pages/mine/index`。
+- tabBar 图标统一使用 PNG 格式，放置在 `static/tabbar/` 目录：未选中态（黑色主体）和选中态（绿色主体 `#2F8A5B`）。
+
+## `manifest.json`
+- 平台配置按目标环境最小化变更，不随意改动会影响包体与审核的字段。
+- 应用标识、权限、域名白名单修改前确认发布环境要求，避免线上不可用。
+
+## `uni.scss`
+- 仅放设计令牌（颜色、间距、字号变量）和全局通用 mixin，不写页面业务样式。
+- 新增变量遵循统一命名（如 `--color-primary` 或 `$color-primary`），避免重复语义。
+- 主题色和语义色建议使用乡村亲和风格的语义命名，如 `$color-primary`、`$color-success`、`$color-warning`。
+- 色彩基线建议：主色浅绿（如 `#2F8A5B`）、背景米白/浅灰（如 `#FFFFFF`/`#F7F8FA`）、次级文本灰（如 `#646A73`）。
+- 阴影与圆角设为全局令牌（轻阴影、小圆角），保证页面视觉一致。

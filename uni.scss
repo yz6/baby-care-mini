@@ -1,0 +1,171 @@
+// 现代互联网扁平化设计系统
+
+// 现代色彩系统
+$color-primary: #00c896;
+$color-primary-dark: #00b085;
+$color-primary-light: #e6faf6;
+$color-accent: #667eea;
+$color-success: #00d68f;
+$color-warning: #ffc107;
+$color-danger: #ff5252;
+$color-info: #2196f3;
+
+// 渐变色系
+$gradient-primary: linear-gradient(135deg, #00c896 0%, #00b085 100%);
+$gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$gradient-warm: linear-gradient(135deg, #ff8a80 0%, #ff7043 100%);
+
+// 现代文字系统
+$color-text-primary: #1a1a1a;
+$color-text-secondary: #666666;
+$color-text-light: #999999;
+$color-text-placeholder: #cccccc;
+
+// 现代背景系统
+$color-bg-page: #f8fafc;
+$color-bg-section: #ffffff;
+$color-bg-card: #ffffff;
+$color-bg-hover: #f1f5f9;
+$color-bg-active: #e2e8f0;
+
+// 现代边框系统
+$color-border: #e2e8f0;
+$color-border-light: #f1f5f9;
+
+// 现代间距系统
+$spacing-xs: 8rpx;
+$spacing-sm: 12rpx;
+$spacing-md: 16rpx;
+$spacing-lg: 24rpx;
+$spacing-xl: 32rpx;
+$spacing-xxl: 48rpx;
+
+// 现代字体系统
+$font-size-xs: 20rpx;
+$font-size-sm: 24rpx;
+$font-size-md: 28rpx;
+$font-size-lg: 32rpx;
+$font-size-xl: 36rpx;
+$font-size-xxl: 42rpx;
+
+// 现代圆角系统
+$radius-xs: 8rpx;
+$radius-sm: 12rpx;
+$radius-md: 16rpx;
+$radius-lg: 24rpx;
+$radius-xl: 32rpx;
+
+// 现代阴影系统
+$shadow-xs: 0 1rpx 2rpx rgba(0, 0, 0, 0.05);
+$shadow-sm: 0 2rpx 4rpx rgba(0, 0, 0, 0.06);
+$shadow-md: 0 4rpx 8rpx rgba(0, 0, 0, 0.08);
+$shadow-lg: 0 8rpx 16rpx rgba(0, 0, 0, 0.1);
+$shadow-xl: 0 16rpx 32rpx rgba(0, 0, 0, 0.12);
+
+// CSS Variables for runtime usage
+:root {
+  // 主色系
+  --color-primary: #00c896;
+  --color-primary-dark: #00b085;
+  --color-primary-light: #e6faf6;
+  --color-accent: #667eea;
+  --color-success: #00d68f;
+  --color-warning: #ffc107;
+  --color-danger: #ff5252;
+  --color-info: #2196f3;
+  
+  // 渐变
+  --gradient-primary: linear-gradient(135deg, #00c896 0%, #00b085 100%);
+  --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-warm: linear-gradient(135deg, #ff8a80 0%, #ff7043 100%);
+  
+  // 文字
+  --color-text-primary: #1a1a1a;
+  --color-text-secondary: #666666;
+  --color-text-light: #999999;
+  --color-text-placeholder: #cccccc;
+  
+  // 背景
+  --color-bg-page: #f8fafc;
+  --color-bg-section: #ffffff;
+  --color-bg-card: #ffffff;
+  --color-bg-hover: #f1f5f9;
+  --color-bg-active: #e2e8f0;
+  
+  // 边框
+  --color-border: #e2e8f0;
+  --color-border-light: #f1f5f9;
+  
+  // 间距
+  --spacing-xs: 8rpx;
+  --spacing-sm: 12rpx;
+  --spacing-md: 16rpx;
+  --spacing-lg: 24rpx;
+  --spacing-xl: 32rpx;
+  --spacing-xxl: 48rpx;
+  
+  // 字体
+  --font-size-xs: 20rpx;
+  --font-size-sm: 24rpx;
+  --font-size-md: 28rpx;
+  --font-size-lg: 32rpx;
+  --font-size-xl: 36rpx;
+  --font-size-xxl: 42rpx;
+  
+  // 圆角
+  --radius-xs: 8rpx;
+  --radius-sm: 12rpx;
+  --radius-md: 16rpx;
+  --radius-lg: 24rpx;
+  --radius-xl: 32rpx;
+  
+  // 阴影
+  --shadow-xs: 0 1rpx 2rpx rgba(0, 0, 0, 0.05);
+  --shadow-sm: 0 2rpx 4rpx rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4rpx 8rpx rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8rpx 16rpx rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 16rpx 32rpx rgba(0, 0, 0, 0.12);
+  
+  // 状态栏高度适配
+  --status-bar-height: 44rpx;
+}
+
+// 全局基础样式重置
+page {
+  background-color: var(--color-bg-page);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+}
+
+// 现代化全局组件样式
+.modern-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  border: none;
+  overflow: hidden;
+}
+
+.modern-button {
+  background: var(--gradient-primary);
+  border: none;
+  border-radius: var(--radius-md);
+  color: white;
+  font-weight: 500;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  
+  &:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1rpx);
+  }
+}
+
+.modern-tag {
+  background: var(--color-primary-light);
+  color: var(--color-primary);
+  border-radius: var(--radius-xl);
+  font-size: var(--font-size-sm);
+  font-weight: 500;
+}

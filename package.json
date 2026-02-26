@@ -1,0 +1,21 @@
+{
+  "name": "baby-care-mini",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"No test configured\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@dcloudio/uni-ui": "^1.5.11",
+    "pinia": "^3.0.4"
+  },
+  "devDependencies": {
+    "@dcloudio/types": "^3.4.29",
+    "typescript": "^5.9.3"
+  }
+}

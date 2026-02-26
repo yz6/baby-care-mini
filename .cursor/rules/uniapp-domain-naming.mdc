@@ -1,0 +1,30 @@
+---
+description: 乡小育业务域命名、路由与目录命名规范
+alwaysApply: true
+---
+
+# Xiang Xiaoyu Naming Rules
+
+## 命名总原则
+- 变量/函数/文件名统一使用英文语义命名，UI 文案使用中文。
+- 优先使用业务语义词：`homeVisit`、`parentActivity`、`familyProfile`、`teachingSupport`。
+- 禁止含糊命名：`info`、`data`、`list2`、`temp`。
+
+## 页面与目录命名
+- 页面目录使用 `kebab-case`，如 `pages/service-management/home-visit-list`。
+- 组件文件使用 `PascalCase`，如 `HomeVisitCard.vue`。
+- composable 使用 `useXxx`，如 `useHomeVisitPlan.ts`。
+- store 使用 `xxxStore`，如 `serviceManagementStore.ts`。
+
+## 业务实体命名建议
+- 婴幼儿档案：`childProfile`
+- 家庭档案：`familyProfile`
+- 入户记录：`homeVisitRecord`
+- 活动记录：`activityRecord`
+- 教学资源：`teachingResource`
+
+## 底部导航固定结构
+- 首页：`pages/home/index`
+- 服务管理：`pages/service-management/index`
+- 家长支持：`pages/parent-support/index`
+- 我的：`pages/mine/index`
