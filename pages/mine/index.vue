@@ -107,7 +107,7 @@ const systemMenus = ref<MenuItem[]>([
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding-top: calc(var(--status-bar-height, 44rpx) + 54rpx);
+  margin-top: calc(var(--status-bar-height, 44rpx) + 54rpx);
 }
 
 .avatar-section {

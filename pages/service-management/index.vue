@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <UniPageHead title="服务管理" subtitle="入户指导 + 活动组织 + 数据记录" />
+    <UniPageHead title="服务管理" />
 
     <view class="filter-row">
       <view v-for="item in filterTabs" :key="item.key" class="filter-chip" :class="{ active: item.key === activeTab }" @click="activeTab = item.key">
