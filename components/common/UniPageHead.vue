@@ -1,8 +1,8 @@
 <template>
   <view class="page-head">
     <view class="head-content">
-      <text class="head-greeting">{{ greeting || 'Hi，早上好！' }}</text>
-      <text class="head-subtitle">{{ subtitle || (title + ' ✨') }}</text>
+      <text class="head-greeting">{{ greeting || "Hi，早上好！" }}</text>
+      <text class="head-subtitle">{{ subtitle || title + " ✨" }}</text>
     </view>
     <slot name="extra" />
   </view>
@@ -26,6 +26,7 @@ defineProps<Props>();
   padding: 0;
   margin-bottom: var(--spacing-xl);
   background: transparent;
+  padding-top: calc(var(--status-bar-height, 44rpx) + 54rpx);
 }
 
 .head-content {

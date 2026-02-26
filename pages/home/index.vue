@@ -1,16 +1,7 @@
 <template>
   <PageContainer>
     <!-- 统一页面头部 -->
-    <UniPageHead 
-      title="今天是个美好的一天" 
-      subtitle="今天是个美好的一天 ✨"
-    >
-      <template #extra>
-        <view class="status-badge">
-          <text class="status-text">今日排班</text>
-        </view>
-      </template>
-    </UniPageHead>
+    <UniPageHead title="今天是个美好的一天" subtitle="今天是个美好的一天 ✨"> </UniPageHead>
 
     <!-- 数据概览卡片 -->
     <view class="stats-section">
@@ -62,6 +53,7 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import PageContainer from "../../components/common/PageContainer.vue";
+import UniPageHead from "../../components/common/UniPageHead.vue";
 
 interface MetricItem {
   key: string;

@@ -11,7 +11,7 @@
           <view class="profile-location">{{ userInfo.location }}</view>
         </view>
       </view>
-      <view class="cert-badge">持证上岗</view>
+      <!-- <view class="cert-badge">持证上岗</view> -->
     </view>
 
     <view class="stats-overview">
@@ -75,27 +75,27 @@ interface MenuItem {
 const userInfo = ref<UserInfo>({
   name: "张老师",
   role: "乡村早期教育指导教师",
-  location: "XX县XX镇工作站"
+  location: "XX县XX镇工作站",
 });
 
 const workStats = ref<StatItem[]>([
   { key: "families", value: "32", label: "服务家庭" },
   { key: "visits", value: "128", label: "入户次数" },
   { key: "activities", value: "24", label: "组织活动" },
-  { key: "records", value: "156", label: "成长记录" }
+  { key: "records", value: "156", label: "成长记录" },
 ]);
 
 const workTools = ref<MenuItem[]>([
   { key: "data", title: "我的数据报表", desc: "查看工作统计与绩效", icon: "bars" },
   { key: "schedule", title: "工作日程安排", desc: "管理入户和活动时间", icon: "calendar" },
-  { key: "materials", title: "教学资料库", desc: "课件模板与指导资源", icon: "folder" }
+  { key: "materials", title: "教学资料库", desc: "课件模板与指导资源", icon: "folder" },
 ]);
 
 const systemMenus = ref<MenuItem[]>([
   { key: "settings", title: "账号设置", desc: "修改密码与个人信息", icon: "gear" },
   { key: "help", title: "使用帮助", desc: "功能介绍与操作指南", icon: "help" },
   { key: "feedback", title: "意见反馈", desc: "问题反馈与功能建议", icon: "chatbubble" },
-  { key: "about", title: "关于乡小育", desc: "版本信息与服务协议", icon: "info" }
+  { key: "about", title: "关于乡小育", desc: "版本信息与服务协议", icon: "info" },
 ]);
 </script>
 
@@ -107,6 +107,7 @@ const systemMenus = ref<MenuItem[]>([
   display: flex;
   align-items: center;
   justify-content: space-between;
+  padding-top: calc(var(--status-bar-height, 44rpx) + 54rpx);
 }
 
 .avatar-section {
