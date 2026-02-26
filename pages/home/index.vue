@@ -1,25 +1,21 @@
 <template>
   <PageContainer>
-    <!-- 现代化头部问候 -->
-    <view class="header-section">
-      <view class="greeting-area">
-        <text class="greeting-title">Hi，早上好！</text>
-        <text class="greeting-subtitle">今天是个美好的一天 ✨</text>
-      </view>
-      <view class="status-badge">
-        <text class="status-text">今日排班</text>
-      </view>
-    </view>
+    <!-- 统一页面头部 -->
+    <UniPageHead 
+      title="今天是个美好的一天" 
+      subtitle="今天是个美好的一天 ✨"
+    >
+      <template #extra>
+        <view class="status-badge">
+          <text class="status-text">今日排班</text>
+        </view>
+      </template>
+    </UniPageHead>
 
     <!-- 数据概览卡片 -->
     <view class="stats-section">
       <view class="stats-grid">
-        <view 
-          class="stat-card" 
-          v-for="(item, index) in metrics" 
-          :key="item.key"
-          :class="{ 'featured': index === 0 }"
-        >
+        <view class="stat-card" v-for="(item, index) in metrics" :key="item.key" :class="{ featured: index === 0 }">
           <view class="stat-content">
             <text class="stat-value">{{ item.value }}</text>
             <text class="stat-label">{{ item.label }}</text>
@@ -108,33 +104,7 @@ const todos = ref<TodoItem[]>([
 </script>
 
 <style scoped lang="scss">
-// 现代化头部样式
-.header-section {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: var(--spacing-xl);
-}
-
-.greeting-area {
-  flex: 1;
-}
-
-.greeting-title {
-  display: block;
-  font-size: var(--font-size-xxl);
-  font-weight: 600;
-  color: var(--color-text-primary);
-  line-height: 1.2;
-}
-
-.greeting-subtitle {
-  display: block;
-  font-size: var(--font-size-md);
-  color: var(--color-text-secondary);
-  margin-top: var(--spacing-xs);
-}
-
+// 状态徽章样式
 .status-badge {
   background: var(--gradient-primary);
   padding: var(--spacing-sm) var(--spacing-lg);
@@ -168,15 +138,16 @@ const todos = ref<TodoItem[]>([
   border: none;
   overflow: hidden;
   transition: all 0.3s ease;
-  
+
   &.featured {
     background: var(--gradient-primary);
-    
-    .stat-value, .stat-label {
+
+    .stat-value,
+    .stat-label {
       color: white;
     }
   }
-  
+
   &:hover {
     transform: translateY(-2rpx);
     box-shadow: var(--shadow-md);
@@ -263,7 +234,7 @@ const todos = ref<TodoItem[]>([
   border: none;
   text-align: center;
   transition: all 0.2s ease;
-  
+
   &:hover {
     box-shadow: var(--shadow-sm);
     transform: translateY(-1rpx);
@@ -310,11 +281,11 @@ const todos = ref<TodoItem[]>([
   padding: var(--spacing-md) var(--spacing-lg);
   border-radius: var(--radius-md);
   transition: all 0.2s ease;
-  
+
   &:hover {
     background: var(--color-bg-hover);
   }
-  
+
   &:not(:last-child) {
     margin-bottom: var(--spacing-xs);
   }

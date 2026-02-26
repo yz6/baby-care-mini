@@ -1,8 +1,8 @@
 <template>
   <view class="page-head">
     <view class="head-content">
-      <text class="head-greeting">Hi，早上好！</text>
-      <text class="head-subtitle">{{ title }} ✨</text>
+      <text class="head-greeting">{{ greeting || 'Hi，早上好！' }}</text>
+      <text class="head-subtitle">{{ subtitle || (title + ' ✨') }}</text>
     </view>
     <slot name="extra" />
   </view>
@@ -12,6 +12,7 @@
 interface Props {
   title: string;
   subtitle?: string;
+  greeting?: string;
 }
 
 defineProps<Props>();
