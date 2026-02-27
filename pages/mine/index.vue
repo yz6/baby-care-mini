@@ -1,7 +1,5 @@
 <template>
   <PageContainer>
-    <UniPageHead title="我的" subtitle="教师信息、工作数据与系统设置" :compact="isPageHeadCompact" />
-
     <view class="profile-card">
       <view class="avatar-section">
         <view class="avatar">
@@ -53,11 +51,7 @@
 
 <script setup lang="ts">
 import PageContainer from "../../components/common/PageContainer.vue";
-import UniPageHead from "../../components/common/UniPageHead.vue";
-import { usePageHeadCompact } from "../../composables/usePageHeadCompact";
 import { exportActionItems, settingActionItems, teacherProfile, workStatItems } from "../../mock/mine";
-
-const { isPageHeadCompact } = usePageHeadCompact();
 
 const showMockTip = (title: string) => {
   uni.showToast({ title, icon: "none" });
@@ -72,7 +66,7 @@ const showMockTip = (title: string) => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: 12rpx;
+  margin-top: calc(var(--status-bar-height, 44rpx) + 84rpx);
 }
 
 .avatar-section {

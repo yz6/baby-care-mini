@@ -2,7 +2,6 @@
   <PageContainer>
     <UniPageHead
       title="亲子活动"
-      subtitle="活动方案库、活动发布与活动记录"
       :showBack="true"
       backFallbackUrl="/pages/service-management/index"
       :compact="isPageHeadCompact"

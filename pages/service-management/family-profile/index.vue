@@ -2,7 +2,6 @@
   <PageContainer>
     <UniPageHead
       title="家庭档案"
-      subtitle="家庭信息、婴幼儿信息与历史记录"
       :showBack="true"
       backFallbackUrl="/pages/service-management/index"
       :compact="isPageHeadCompact"

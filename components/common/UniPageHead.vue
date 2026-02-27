@@ -5,15 +5,13 @@
         <uni-icons type="left" size="20" color="#1a1a1a" />
       </view>
       <view class="head-content">
-        <!-- 有问候语时显示问候语+副标题的首页模式 -->
+        <!-- 有问候语时显示首页模式（仅主标题） -->
         <template v-if="greeting">
           <text class="head-greeting">{{ greeting }}</text>
-          <text class="head-subtitle">{{ subtitle || title }}</text>
         </template>
-        <!-- 无问候语时显示标题+副标题的普通页面模式 -->
+        <!-- 无问候语时仅显示标题 -->
         <template v-else>
           <text class="head-title">{{ title }}</text>
-          <text v-if="subtitle" class="head-subtitle">{{ subtitle }}</text>
         </template>
       </view>
       <slot name="extra" />
@@ -26,7 +24,6 @@ import { computed } from "vue";
 
 interface Props {
   title: string;
-  subtitle?: string;
   greeting?: string;
   showBack?: boolean;
   backFallbackUrl?: string;
@@ -51,7 +48,7 @@ const handleBack = () => {
 
 <style scoped lang="scss">
 .page-head-anchor {
-  height: calc(var(--status-bar-height, 44rpx) + 136rpx);
+  height: calc(var(--status-bar-height, 44rpx) + 150rpx);
   margin-bottom: var(--spacing-md);
 }
 
@@ -75,10 +72,6 @@ const handleBack = () => {
   border-bottom: 1rpx solid var(--color-border);
 }
 
-.page-head-fixed.compact .head-subtitle {
-  display: none;
-}
-
 .page-head-fixed.compact .head-greeting,
 .page-head-fixed.compact .head-title {
   font-size: var(--font-size-lg);
@@ -99,7 +92,6 @@ const handleBack = () => {
 
 .head-content {
   flex: 1;
-  padding: 12rpx 16rpx;
 }
 
 .page-head-fixed.compact .head-content {
@@ -120,13 +112,5 @@ const handleBack = () => {
   font-weight: 600;
   color: var(--color-text-primary);
   line-height: 1.2;
-}
-
-.head-subtitle {
-  display: block;
-  font-size: var(--font-size-md);
-  color: var(--color-text-secondary);
-  margin-top: var(--spacing-xs);
-  transition: all 0.2s ease;
 }
 </style>

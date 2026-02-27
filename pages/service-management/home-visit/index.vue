@@ -2,7 +2,6 @@
   <PageContainer>
     <UniPageHead
       title="入户指导"
-      subtitle="预约管理、生长发育与发展特点记录"
       :showBack="true"
       backFallbackUrl="/pages/service-management/index"
       :compact="isPageHeadCompact"

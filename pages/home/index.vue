@@ -1,14 +1,11 @@
 <template>
   <PageContainer>
-    <UniPageHead greeting="Hi，早上好！" title="今日工作概况" :compact="isPageHeadCompact">
-      <template #extra>
-        <view class="date-chip">{{ homeDateText }}</view>
-      </template>
-    </UniPageHead>
+    <UniPageHead greeting="Hi，早上好！" title="今日工作概况" :compact="isPageHeadCompact" />
 
     <view class="section">
       <view class="section-header">
         <text class="section-title">今日概况</text>
+        <view class="date-chip">{{ homeDateText }}</view>
       </view>
       <view class="stats-grid">
         <view class="stat-card" v-for="(item, index) in homeOverviewItems" :key="item.key" :class="{ featured: index === 0 }">
@@ -102,6 +99,9 @@ const goByAction = (route?: string) => {
 }
 
 .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: var(--spacing-md);
 }
 

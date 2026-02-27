@@ -2,7 +2,6 @@
   <PageContainer>
     <UniPageHead
       title="育儿文库"
-      subtitle="按月龄段、发展领域与热点问题管理内容"
       :showBack="true"
       backFallbackUrl="/pages/parent-support/index"
       :compact="isPageHeadCompact"

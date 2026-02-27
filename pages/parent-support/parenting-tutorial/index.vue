@@ -2,7 +2,6 @@
   <PageContainer>
     <UniPageHead
       title="育儿教程"
-      subtitle="教程视频、家庭关联与播放统计"
       :showBack="true"
       backFallbackUrl="/pages/parent-support/index"
       :compact="isPageHeadCompact"

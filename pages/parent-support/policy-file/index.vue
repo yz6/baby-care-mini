@@ -2,7 +2,6 @@
   <PageContainer>
     <UniPageHead
       title="政策文件"
-      subtitle="国家级、地方与行业规范文件管理"
       :showBack="true"
       backFallbackUrl="/pages/parent-support/index"
       :compact="isPageHeadCompact"

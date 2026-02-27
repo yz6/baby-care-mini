@@ -2,7 +2,6 @@
   <PageContainer>
     <UniPageHead
       title="推送管理"
-      subtitle="定向、批量与定时推送设置"
       :showBack="true"
       backFallbackUrl="/pages/parent-support/index"
       :compact="isPageHeadCompact"

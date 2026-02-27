@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <UniPageHead title="共育支持" subtitle="育儿文库、教程、政策与推送管理" :compact="isPageHeadCompact" />
+    <UniPageHead title="共育支持" :compact="isPageHeadCompact" />
 
     <view class="entry-grid">
       <view class="entry-card" v-for="entry in parentSupportEntries" :key="entry.key" @click="goToPage(entry.route)">
