@@ -15,10 +15,33 @@ export const homeQuickActions: HomeQuickAction[] = [
   { key: "activityPlan", name: "查看活动方案", desc: "浏览分龄活动方案库", icon: "list", route: "/pages/service-management/parent-activity/index" },
 ];
 
-export const homeTrendPoints: HomeTrendPoint[] = [
-  { week: "周一", familyCount: 8, visitCount: 5 },
-  { week: "周二", familyCount: 10, visitCount: 6 },
-  { week: "周三", familyCount: 11, visitCount: 7 },
-  { week: "周四", familyCount: 9, visitCount: 6 },
-  { week: "周五", familyCount: 12, visitCount: 8 },
+const formatDateMMDD = (date: Date) => {
+  const month = `${date.getMonth() + 1}`.padStart(2, "0");
+  const day = `${date.getDate()}`.padStart(2, "0");
+  return `${month}-${day}`;
+};
+
+const buildLast7DaysLabels = () => {
+  const currentDate = new Date();
+  return Array.from({ length: 7 }, (_, index) => {
+    const tempDate = new Date(currentDate);
+    tempDate.setDate(currentDate.getDate() - (6 - index));
+    return formatDateMMDD(tempDate);
+  });
+};
+
+const trendMockValues = [
+  { familyCount: 8, visitCount: 5 },
+  { familyCount: 10, visitCount: 6 },
+  { familyCount: 11, visitCount: 7 },
+  { familyCount: 9, visitCount: 6 },
+  { familyCount: 12, visitCount: 8 },
+  { familyCount: 13, visitCount: 8 },
+  { familyCount: 14, visitCount: 9 },
 ];
+
+export const homeTrendPoints: HomeTrendPoint[] = buildLast7DaysLabels().map((label, index) => ({
+  week: label,
+  familyCount: trendMockValues[index].familyCount,
+  visitCount: trendMockValues[index].visitCount,
+}));

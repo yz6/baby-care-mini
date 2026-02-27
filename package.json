@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "@dcloudio/uni-ui": "^1.5.11",
+    "@qiun/ucharts": "^2.5.0-20230101",
     "pinia": "^3.0.4"
   },
   "devDependencies": {

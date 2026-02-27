@@ -45,15 +45,7 @@
             <text class="trend-value">{{ monthVisitTotal }}</text>
           </view>
         </view>
-        <view class="bar-list">
-          <view class="bar-item" v-for="point in homeTrendPoints" :key="point.week">
-            <view class="bar-wrap">
-              <view class="bar-column" :style="{ height: `${point.familyCount * 7}rpx` }" />
-              <view class="bar-line-dot" :style="{ bottom: `${point.visitCount * 7}rpx` }" />
-            </view>
-            <text class="bar-label">{{ point.week }}</text>
-          </view>
-        </view>
+        <HomeTrendChart :points="homeTrendPoints" />
       </view>
     </view>
   </PageContainer>
@@ -61,6 +53,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
+import HomeTrendChart from "../../components/charts/HomeTrendChart.vue";
 import PageContainer from "../../components/common/PageContainer.vue";
 import UniPageHead from "../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../composables/usePageHeadCompact";
@@ -222,50 +215,5 @@ const goByAction = (route?: string) => {
   font-size: var(--font-size-lg);
   font-weight: 700;
   color: var(--color-primary);
-}
-
-.bar-list {
-  height: 200rpx;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
-  gap: 6rpx;
-  align-items: end;
-}
-
-.bar-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.bar-wrap {
-  position: relative;
-  width: 30rpx;
-  height: 150rpx;
-  display: flex;
-  align-items: end;
-}
-
-.bar-column {
-  width: 30rpx;
-  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
-  background: var(--color-primary-light);
-  border: 1rpx solid var(--color-primary);
-}
-
-.bar-line-dot {
-  position: absolute;
-  left: 50%;
-  width: 14rpx;
-  height: 14rpx;
-  margin-left: -7rpx;
-  border-radius: 50%;
-  background: var(--color-primary);
-}
-
-.bar-label {
-  margin-top: 8rpx;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
 }
 </style>
