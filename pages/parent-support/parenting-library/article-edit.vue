@@ -43,7 +43,7 @@ import { reactive, ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
-import { parentingArticleDefaultForm } from "../../../mock/parent-support";
+import { addParentingLibraryItem, parentingArticleDefaultForm } from "../../../mock/parent-support";
 
 const { isPageHeadCompact } = usePageHeadCompact();
 const form = reactive({ ...parentingArticleDefaultForm });
@@ -79,7 +79,14 @@ const submitArticle = () => {
     uni.showToast({ title: "请选择发布日期", icon: "none" });
     return;
   }
-  uni.showToast({ title: "文章发布成功（mock）", icon: "none" });
+  addParentingLibraryItem({
+    title: form.title,
+    monthRange: form.monthRange,
+    domain: form.domain,
+    hotTopic: form.hotTopic,
+  });
+  uni.showToast({ title: "文章发布成功", icon: "none" });
+  uni.navigateBack();
 };
 </script>
 

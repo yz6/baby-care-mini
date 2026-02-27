@@ -37,6 +37,7 @@ import { ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
+import { addFeedbackRecord } from "../../../mock/mine";
 
 const { isPageHeadCompact } = usePageHeadCompact();
 const feedbackTypeOptions = ["功能建议", "问题反馈", "体验评价"];
@@ -74,7 +75,20 @@ const submitFeedback = () => {
     uni.showToast({ title: "请至少选择一个涉及模块", icon: "none" });
     return;
   }
-  uni.showToast({ title: "反馈提交成功（mock）", icon: "none" });
+  const now = new Date();
+  const createdAt = `${now.getFullYear()}-${`${now.getMonth() + 1}`.padStart(2, "0")}-${`${now.getDate()}`.padStart(2, "0")} ${`${now.getHours()}`.padStart(2, "0")}:${`${now.getMinutes()}`.padStart(2, "0")}`;
+  addFeedbackRecord(
+    {
+      type: feedbackTypeOptions[typeIndex.value],
+      priority: priority.value,
+      modules: selectedModules.value,
+      expectedReplyDate: expectedReplyDate.value,
+      content: feedbackContent.value,
+      contact: contactInfo.value,
+    },
+    createdAt
+  );
+  uni.showToast({ title: "反馈提交成功", icon: "none" });
 };
 </script>
 

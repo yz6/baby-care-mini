@@ -32,6 +32,21 @@
 
     <view class="section">
       <view class="section-header">
+        <text class="section-title">近期活动</text>
+        <text class="more-link" @click="goByAction('/pages/service-management/parent-activity/recent-activity')">查看全部</text>
+      </view>
+      <view class="activity-card">
+        <view class="activity-row" v-for="item in recentActivityItems" :key="item.id">
+          <view class="activity-title">{{ item.title }}</view>
+          <view class="activity-meta">{{ item.date }}</view>
+          <view class="activity-desc">{{ item.observation }}</view>
+        </view>
+        <view v-if="recentActivityItems.length === 0" class="activity-empty">暂无活动记录，去服务页发布一个活动吧</view>
+      </view>
+    </view>
+
+    <view class="section">
+      <view class="section-header">
         <text class="section-title">数据趋势简报</text>
       </view>
       <view class="trend-card">
@@ -58,9 +73,11 @@ import PageContainer from "../../components/common/PageContainer.vue";
 import UniPageHead from "../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../composables/usePageHeadCompact";
 import { homeDateText, homeOverviewItems, homeQuickActions, homeTrendPoints } from "../../mock/home";
+import { activityRecords } from "../../mock/service-management";
 
 const weekFamilyTotal = computed(() => homeTrendPoints.reduce((sum, item) => sum + item.familyCount, 0));
 const monthVisitTotal = computed(() => homeTrendPoints.reduce((sum, item) => sum + item.visitCount, 0));
+const recentActivityItems = computed(() => activityRecords.slice(0, 3));
 const { isPageHeadCompact } = usePageHeadCompact();
 
 const tabRoutes = new Set(["/pages/home/index", "/pages/service-management/index", "/pages/parent-support/index", "/pages/mine/index"]);
@@ -102,6 +119,11 @@ const goByAction = (route?: string) => {
   font-size: var(--font-size-lg);
   color: var(--color-text-primary);
   font-weight: 600;
+}
+
+.more-link {
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
 }
 
 .stats-grid {
@@ -181,6 +203,46 @@ const goByAction = (route?: string) => {
   font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
   line-height: 1.4;
+}
+
+.activity-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  box-shadow: var(--shadow-xs);
+}
+
+.activity-row {
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid var(--color-border);
+}
+
+.activity-row:last-child {
+  border-bottom: none;
+}
+
+.activity-title {
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.activity-meta {
+  margin-top: 6rpx;
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-dark);
+}
+
+.activity-desc {
+  margin-top: 6rpx;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.activity-empty {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-placeholder);
+  padding: 18rpx 0;
 }
 
 .trend-card {

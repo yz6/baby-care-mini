@@ -25,14 +25,20 @@ import { ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
+import { noticeSetting, saveNoticeSetting } from "../../../mock/mine";
 
 const { isPageHeadCompact } = usePageHeadCompact();
-const homeVisitNotice = ref(true);
-const activityNotice = ref(true);
-const parentSupportNotice = ref(false);
+const homeVisitNotice = ref(noticeSetting.homeVisitNotice);
+const activityNotice = ref(noticeSetting.activityNotice);
+const parentSupportNotice = ref(noticeSetting.parentSupportNotice);
 
 const saveSettings = () => {
-  uni.showToast({ title: "通知设置已保存（mock）", icon: "none" });
+  saveNoticeSetting({
+    homeVisitNotice: homeVisitNotice.value,
+    activityNotice: activityNotice.value,
+    parentSupportNotice: parentSupportNotice.value,
+  });
+  uni.showToast({ title: "通知设置已保存", icon: "none" });
 };
 </script>
 

@@ -49,7 +49,7 @@ import { reactive, ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
-import { homeVisitRecordDefaultForm } from "../../../mock/service-management";
+import { homeVisitRecordDefaultForm, saveHomeVisitRecordForm } from "../../../mock/service-management";
 
 const { isPageHeadCompact } = usePageHeadCompact();
 const form = reactive({ ...homeVisitRecordDefaultForm });
@@ -98,7 +98,8 @@ const submitRecord = () => {
     uni.showToast({ title: "请至少选择一个观察维度", icon: "none" });
     return;
   }
-  uni.showToast({ title: "入户记录已保存（mock）", icon: "none" });
+  saveHomeVisitRecordForm(form);
+  uni.showToast({ title: "入户记录已保存", icon: "none" });
 };
 </script>
 

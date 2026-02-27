@@ -57,7 +57,7 @@ import { computed, ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
-import { developmentTagGroups, growthRecords, homeVisitAppointments } from "../../../mock/service-management";
+import { developmentTagGroups, growthRecords, homeVisitAppointments, updateHomeVisitAppointment } from "../../../mock/service-management";
 import type { HomeVisitAppointmentItem, ServiceStatus } from "../../../types/service-management";
 
 const selectedIndex = ref(0);
@@ -118,7 +118,7 @@ const cancelAppointment = () => {
       if (!confirm) {
         return;
       }
-      selectedAppointment.value.status = "cancelled";
+      updateHomeVisitAppointment(selectedAppointment.value.id, { status: "cancelled" });
       uni.showToast({ title: "预约已取消", icon: "none" });
     },
   });

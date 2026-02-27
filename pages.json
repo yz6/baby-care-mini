@@ -109,6 +109,24 @@
       }
     },
     {
+      "path": "pages/service-management/parent-activity/publish",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/service-management/parent-activity/plan-library",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
+      "path": "pages/service-management/parent-activity/recent-activity",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/parent-support/parenting-library/article-edit",
       "style": {
         "navigationStyle": "custom"

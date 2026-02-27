@@ -24,7 +24,7 @@ import { ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
-import { exportHistoryItems } from "../../../mock/mine";
+import { addExportHistoryItem, exportHistoryItems } from "../../../mock/mine";
 
 const { isPageHeadCompact } = usePageHeadCompact();
 const exportTypeOptions = ["入户记录", "活动记录", "家庭发展报告"];
@@ -40,7 +40,10 @@ const createExportTask = () => {
     uni.showToast({ title: "请填写导出时间范围", icon: "none" });
     return;
   }
-  uni.showToast({ title: "导出任务已创建（mock）", icon: "none" });
+  const now = new Date();
+  const createdAt = `${now.getFullYear()}-${`${now.getMonth() + 1}`.padStart(2, "0")}-${`${now.getDate()}`.padStart(2, "0")} ${`${now.getHours()}`.padStart(2, "0")}:${`${now.getMinutes()}`.padStart(2, "0")}`;
+  addExportHistoryItem(exportTypeOptions[typeIndex.value] as "入户记录" | "活动记录" | "家庭发展报告", dateRange.value, createdAt);
+  uni.showToast({ title: "导出任务已创建", icon: "none" });
 };
 </script>
 

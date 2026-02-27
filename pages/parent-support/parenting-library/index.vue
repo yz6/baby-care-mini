@@ -75,6 +75,7 @@ const mockPushArticle = () => {
   margin-top: 12rpx;
   display: flex;
   gap: 12rpx;
+  align-items: center;
 }
 
 .search-input {
@@ -88,9 +89,13 @@ const mockPushArticle = () => {
 }
 
 .publish-btn {
-  min-height: 72rpx;
-  line-height: 72rpx;
-  padding: 0 14rpx;
+  height: 64rpx;
+  min-height: 64rpx;
+  line-height: 64rpx;
+  padding: 0 20rpx;
+  margin: 0;
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
   color: #ffffff;
   background: var(--gradient-primary);
   border-radius: 999rpx;

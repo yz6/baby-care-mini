@@ -54,7 +54,7 @@ import { ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
-import { pushRecordItems, pushTargets } from "../../../mock/parent-support";
+import { addPushRecordItem, pushRecordItems, pushTargets } from "../../../mock/parent-support";
 import type { PushRecordItem } from "../../../types/parent-support";
 
 const { isPageHeadCompact } = usePageHeadCompact();
@@ -100,7 +100,13 @@ const submitPush = () => {
     uni.showToast({ title: "请至少选择一个推送渠道", icon: "none" });
     return;
   }
-  uni.showToast({ title: `${selectedMode.value}已创建（mock）`, icon: "none" });
+  addPushRecordItem({
+    mode: selectedMode.value,
+    content: content.value,
+    sendTime: `${sendDate.value} ${sendClock.value}`,
+    targetFamilies: selectedTargets.value,
+  });
+  uni.showToast({ title: `${selectedMode.value}已创建`, icon: "none" });
 };
 </script>
 

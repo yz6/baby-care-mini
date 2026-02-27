@@ -18,7 +18,7 @@
         <view class="action-row">
           <text class="action-btn" @click="goToReader(item.id)">在线阅读</text>
           <text class="action-btn" @click="showMockTip('下载成功（mock）')">下载</text>
-          <text class="action-btn" @click="showMockTip(item.collect ? '已取消收藏（mock）' : '已收藏（mock）')">{{ item.collect ? "已收藏" : "收藏" }}</text>
+          <text class="action-btn" @click="handleCollectToggle(item.id)">{{ item.collect ? "已收藏" : "收藏" }}</text>
         </view>
       </view>
     </uni-card>
@@ -30,7 +30,7 @@ import { computed, ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
-import { policyFileItems } from "../../../mock/parent-support";
+import { policyFileItems, togglePolicyCollect } from "../../../mock/parent-support";
 import type { PolicyFileItem } from "../../../types/parent-support";
 
 const { isPageHeadCompact } = usePageHeadCompact();
@@ -49,6 +49,15 @@ const goToReader = (id: string) => {
 
 const showMockTip = (title: string) => {
   uni.showToast({ title, icon: "none" });
+};
+
+const handleCollectToggle = (id: string) => {
+  const success = togglePolicyCollect(id);
+  if (!success) {
+    uni.showToast({ title: "收藏状态更新失败", icon: "none" });
+    return;
+  }
+  uni.showToast({ title: "收藏状态已更新", icon: "none" });
 };
 </script>
 

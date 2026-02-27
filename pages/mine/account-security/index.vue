@@ -16,6 +16,7 @@ import { ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
+import { updateAccountPassword, validateAccountPassword } from "../../../mock/mine";
 
 const { isPageHeadCompact } = usePageHeadCompact();
 const oldPassword = ref("");
@@ -27,6 +28,10 @@ const submitPassword = () => {
     uni.showToast({ title: "请填写完整密码信息", icon: "none" });
     return;
   }
+  if (!validateAccountPassword(oldPassword.value)) {
+    uni.showToast({ title: "原密码不正确", icon: "none" });
+    return;
+  }
   if (newPassword.value.length < 6) {
     uni.showToast({ title: "新密码至少6位", icon: "none" });
     return;
@@ -35,7 +40,8 @@ const submitPassword = () => {
     uni.showToast({ title: "两次输入的新密码不一致", icon: "none" });
     return;
   }
-  uni.showToast({ title: "密码修改成功（mock）", icon: "none" });
+  updateAccountPassword(newPassword.value);
+  uni.showToast({ title: "密码修改成功", icon: "none" });
 };
 </script>
 

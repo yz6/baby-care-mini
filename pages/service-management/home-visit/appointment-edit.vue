@@ -4,22 +4,22 @@
 
     <uni-card title="预约信息编辑" :is-shadow="false">
       <view class="field-label">家庭编号</view>
-      <view class="readonly-field">{{ appointment.familyCode }}</view>
+      <view class="readonly-field">{{ draftAppointment.familyCode }}</view>
 
       <view class="field-label">预约日期</view>
-      <picker mode="date" :value="appointment.appointmentDate" @change="handleDateChange">
-        <view class="picker-field">{{ appointment.appointmentDate || "请选择预约日期" }}</view>
+      <picker mode="date" :value="draftAppointment.appointmentDate" @change="handleDateChange">
+        <view class="picker-field">{{ draftAppointment.appointmentDate || "请选择预约日期" }}</view>
       </picker>
 
       <view class="field-label">时间段</view>
       <picker mode="selector" :range="timeSlotOptions" @change="handleTimeSlotChange">
-        <view class="picker-field">{{ appointment.appointmentSlot || "请选择时间段" }}</view>
+        <view class="picker-field">{{ draftAppointment.appointmentSlot || "请选择时间段" }}</view>
       </picker>
 
       <view class="field-label">预约状态（单选）</view>
       <radio-group class="option-row" @change="handleStatusChange">
         <label class="option-item" v-for="item in statusOptions" :key="item.value">
-          <radio :value="item.value" :checked="appointment.status === item.value" color="#00c896" style="transform:scale(0.8)" />
+          <radio :value="item.value" :checked="draftAppointment.status === item.value" color="#00c896" style="transform:scale(0.8)" />
           <text>{{ item.label }}</text>
         </label>
       </radio-group>
@@ -33,12 +33,12 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref } from "vue";
+import { ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
-import { homeVisitAppointments } from "../../../mock/service-management";
-import type { ServiceStatus } from "../../../types/service-management";
+import { homeVisitAppointments, updateHomeVisitAppointment } from "../../../mock/service-management";
+import type { HomeVisitAppointmentItem, ServiceStatus } from "../../../types/service-management";
 
 declare const onLoad:
   | ((callback: (query: Record<string, string | undefined>) => void) => void)
@@ -46,14 +46,15 @@ declare const onLoad:
 
 const { isPageHeadCompact } = usePageHeadCompact();
 const appointmentId = ref("");
+const draftAppointment = ref<HomeVisitAppointmentItem>({ ...homeVisitAppointments[0] });
 
 if (typeof onLoad === "function") {
   onLoad((query) => {
     appointmentId.value = query.id || "";
+    const target = homeVisitAppointments.find((item) => item.id === appointmentId.value) || homeVisitAppointments[0];
+    draftAppointment.value = { ...target };
   });
 }
-
-const appointment = computed(() => homeVisitAppointments.find((item) => item.id === appointmentId.value) || homeVisitAppointments[0]);
 
 const timeSlotOptions = ["09:00-10:00", "10:00-11:00", "14:00-15:00", "15:00-16:00"];
 const statusOptions: { label: string; value: ServiceStatus }[] = [
@@ -64,28 +65,34 @@ const statusOptions: { label: string; value: ServiceStatus }[] = [
 ];
 
 const handleDateChange = (event: { detail: { value: string } }) => {
-  appointment.value.appointmentDate = event.detail.value;
+  draftAppointment.value.appointmentDate = event.detail.value;
 };
 
 const handleTimeSlotChange = (event: { detail: { value: string } }) => {
-  appointment.value.appointmentSlot = timeSlotOptions[Number(event.detail.value)] || "";
+  draftAppointment.value.appointmentSlot = timeSlotOptions[Number(event.detail.value)] || "";
 };
 
 const handleStatusChange = (event: { detail: { value: string } }) => {
-  appointment.value.status = event.detail.value as ServiceStatus;
+  draftAppointment.value.status = event.detail.value as ServiceStatus;
 };
 
 const saveAppointment = () => {
-  if (!appointment.value.appointmentDate || !appointment.value.appointmentSlot) {
+  if (!draftAppointment.value.appointmentDate || !draftAppointment.value.appointmentSlot) {
     uni.showToast({ title: "请补全预约日期与时间段", icon: "none" });
     return;
   }
-  uni.showToast({ title: "预约已更新（mock）", icon: "none" });
+  updateHomeVisitAppointment(draftAppointment.value.id, {
+    appointmentDate: draftAppointment.value.appointmentDate,
+    appointmentSlot: draftAppointment.value.appointmentSlot,
+    status: draftAppointment.value.status,
+  });
+  uni.showToast({ title: "预约已更新", icon: "none" });
   uni.navigateBack();
 };
 
 const markAsCancelled = () => {
-  appointment.value.status = "cancelled";
+  draftAppointment.value.status = "cancelled";
+  updateHomeVisitAppointment(draftAppointment.value.id, { status: "cancelled" });
   uni.showToast({ title: "预约已标记取消", icon: "none" });
 };
 </script>

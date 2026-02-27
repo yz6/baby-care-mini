@@ -19,7 +19,7 @@ import { reactive } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
-import { tutorialVideoDefaultForm } from "../../../mock/parent-support";
+import { addParentingTutorialItem, tutorialVideoDefaultForm } from "../../../mock/parent-support";
 
 const { isPageHeadCompact } = usePageHeadCompact();
 const form = reactive({ ...tutorialVideoDefaultForm });
@@ -29,7 +29,15 @@ const submitVideo = () => {
     uni.showToast({ title: "请填写标题与视频地址", icon: "none" });
     return;
   }
-  uni.showToast({ title: "视频上传成功（mock）", icon: "none" });
+  addParentingTutorialItem({
+    title: form.title,
+    monthRange: form.monthRange,
+    topic: form.topic,
+    activityType: form.activityType,
+    relatedFamily: form.relatedFamily,
+  });
+  uni.showToast({ title: "视频上传成功", icon: "none" });
+  uni.navigateBack();
 };
 </script>
 

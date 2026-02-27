@@ -39,7 +39,7 @@
         <view class="policy-actions">
           <text class="policy-btn" @click="showMockTip('在线阅读（mock）')">在线阅读</text>
           <text class="policy-btn" @click="showMockTip('开始下载（mock）')">下载</text>
-          <text class="policy-btn" @click="showMockTip(item.collect ? '已取消收藏（mock）' : '已收藏（mock）')">{{ item.collect ? "已收藏" : "收藏" }}</text>
+          <text class="policy-btn" @click="handlePolicyCollect(item.id)">{{ item.collect ? "已收藏" : "收藏" }}</text>
         </view>
       </view>
     </uni-card>
@@ -52,9 +52,9 @@
       <input v-model="pushForm.content" class="form-input" placeholder="推送内容（示例：本周亲子活动通知）" />
       <input v-model="pushForm.time" class="form-input" placeholder="定时推送时间（示例：2026-03-01 20:00）" />
       <view class="push-actions">
-        <button class="push-btn" size="mini" @click="showMockTip('已发起定向推送（mock）')">定向推送</button>
-        <button class="push-btn" size="mini" @click="showMockTip('已发起批量推送（mock）')">批量推送</button>
-        <button class="push-btn" size="mini" @click="showMockTip('已设置定时推送（mock）')">定时推送</button>
+        <button class="push-btn" size="mini" @click="handleQuickPush('定向推送')">定向推送</button>
+        <button class="push-btn" size="mini" @click="handleQuickPush('批量推送')">批量推送</button>
+        <button class="push-btn" size="mini" @click="handleQuickPush('定时推送')">定时推送</button>
       </view>
     </uni-card>
   </PageContainer>
@@ -65,7 +65,7 @@ import { computed, reactive, ref } from "vue";
 import PageContainer from "../../components/common/PageContainer.vue";
 import UniPageHead from "../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../composables/usePageHeadCompact";
-import { parentingLibraryItems, parentingTutorialItems, policyFileItems, pushTargets } from "../../mock/parent-support";
+import { addPushRecordItem, parentingLibraryItems, parentingTutorialItems, policyFileItems, pushTargets, togglePolicyCollect } from "../../mock/parent-support";
 import type { ParentingLibraryItem } from "../../types/parent-support";
 
 type LibraryTabKey = "all" | "monthRange" | "domain" | "hotTopic";
@@ -102,6 +102,25 @@ const pushForm = reactive({
 
 const showMockTip = (title: string) => {
   uni.showToast({ title, icon: "none" });
+};
+
+const handlePolicyCollect = (policyId: string) => {
+  const success = togglePolicyCollect(policyId);
+  uni.showToast({ title: success ? "收藏状态已更新" : "更新失败", icon: "none" });
+};
+
+const handleQuickPush = (mode: "定向推送" | "批量推送" | "定时推送") => {
+  if (!pushForm.content || !pushForm.time) {
+    uni.showToast({ title: "请先填写推送内容和时间", icon: "none" });
+    return;
+  }
+  addPushRecordItem({
+    mode,
+    content: pushForm.content,
+    sendTime: pushForm.time,
+    targetFamilies: pushTargets.map((item) => item.familyName),
+  });
+  uni.showToast({ title: `${mode}已创建`, icon: "none" });
 };
 
 const parentSupportEntries = [
