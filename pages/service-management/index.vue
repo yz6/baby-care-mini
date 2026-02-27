@@ -1,6 +1,13 @@
 <template>
   <PageContainer>
-    <UniPageHead title="服务管理" />
+    <UniPageHead title="服务管理" :compact="isPageHeadCompact" />
+
+    <view class="entry-grid">
+      <view class="entry-card" v-for="item in serviceEntries" :key="item.key" @click="goToPage(item.route)">
+        <view class="entry-title">{{ item.title }}</view>
+        <view class="entry-desc">{{ item.desc }}</view>
+      </view>
+    </view>
 
     <view class="filter-row">
       <view v-for="item in filterTabs" :key="item.key" class="filter-chip" :class="{ active: item.key === activeTab }" @click="activeTab = item.key">
@@ -45,20 +52,20 @@
 import { computed, ref } from "vue";
 import PageContainer from "../../components/common/PageContainer.vue";
 import UniPageHead from "../../components/common/UniPageHead.vue";
+import { usePageHeadCompact } from "../../composables/usePageHeadCompact";
+import { serviceStats, serviceTasks } from "../../mock/service-management";
+import type { ServiceStatus, ServiceTaskItem } from "../../types/service-management";
 
-type ServiceStatus = "pending" | "doing" | "done";
 type FilterTab = "all" | "homeVisit" | "activity";
 
-interface ServiceItem {
-  id: string;
-  name: string;
-  type: "homeVisit" | "activity";
-  family: string;
-  planTime: string;
-  status: ServiceStatus;
-}
-
 const activeTab = ref<FilterTab>("all");
+const { isPageHeadCompact } = usePageHeadCompact();
+
+const serviceEntries = [
+  { key: "familyProfile", title: "家庭档案", desc: "查看家庭与婴幼儿基础信息", route: "/pages/service-management/family-profile/index" },
+  { key: "homeVisit", title: "入户指导", desc: "预约管理、发育记录与量表匹配", route: "/pages/service-management/home-visit/index" },
+  { key: "parentActivity", title: "亲子活动", desc: "活动方案、发布与活动反馈", route: "/pages/service-management/parent-activity/index" },
+] as const;
 
 const filterTabs = [
   { key: "all", label: "全部" },
@@ -66,54 +73,54 @@ const filterTabs = [
   { key: "activity", label: "亲子活动" },
 ] as const;
 
-const stats = ref([
-  { key: "pending", label: "待执行", value: "5" },
-  { key: "doing", label: "进行中", value: "2" },
-  { key: "done", label: "已完成", value: "8" },
-]);
-
-const services = ref<ServiceItem[]>([
-  {
-    id: "1",
-    name: "0-12月婴幼儿入户评估",
-    type: "homeVisit",
-    family: "李家",
-    planTime: "今天 09:30",
-    status: "pending",
-  },
-  {
-    id: "2",
-    name: "亲子语言发展小组活动",
-    type: "activity",
-    family: "村活动室",
-    planTime: "今天 14:00",
-    status: "doing",
-  },
-  {
-    id: "3",
-    name: "家庭喂养指导复盘",
-    type: "homeVisit",
-    family: "王家",
-    planTime: "明天 10:00",
-    status: "done",
-  },
-]);
+const stats = serviceStats;
 
 const statusTextMap: Record<ServiceStatus, string> = {
-  pending: "待执行",
-  doing: "进行中",
+  pending: "待确认",
+  confirmed: "已确认",
   done: "已完成",
 };
 
 const filteredServices = computed(() => {
   if (activeTab.value === "all") {
-    return services.value;
+    return serviceTasks;
   }
-  return services.value.filter((item) => item.type === activeTab.value);
+  return serviceTasks.filter((item: ServiceTaskItem) => item.type === activeTab.value);
 });
+
+const goToPage = (route: string) => {
+  uni.navigateTo({ url: route });
+};
 </script>
 
 <style scoped lang="scss">
+.entry-grid {
+  margin-top: 12rpx;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 12rpx;
+}
+
+.entry-card {
+  min-height: 96rpx;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-card);
+  border: 1rpx solid var(--color-border);
+  padding: 18rpx;
+}
+
+.entry-title {
+  font-size: 30rpx;
+  font-weight: 600;
+  color: var(--color-text-primary);
+}
+
+.entry-desc {
+  margin-top: 8rpx;
+  font-size: 24rpx;
+  color: var(--color-text-secondary);
+}
+
 .filter-row {
   margin-top: 18rpx;
   display: flex;
@@ -199,8 +206,8 @@ const filteredServices = computed(() => {
   background: #fff5e8;
 }
 
-.status-tag.doing {
-  color: var(--color-primary);
+.status-tag.confirmed {
+  color: var(--color-primary-dark);
   background: var(--color-primary-light);
 }
 

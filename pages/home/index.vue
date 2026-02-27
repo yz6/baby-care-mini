@@ -1,40 +1,31 @@
 <template>
   <PageContainer>
-    <!-- 统一页面头部 -->
-    <UniPageHead 
-      greeting="Hi，早上好！" 
-      title="今天是个美好的一天 ✨"
-    >
+    <UniPageHead greeting="Hi，早上好！" title="今日工作概况" :compact="isPageHeadCompact">
       <template #extra>
-        <view class="status-badge">
-          <text class="status-text">今日排班</text>
-        </view>
+        <view class="date-chip">{{ homeDateText }}</view>
       </template>
     </UniPageHead>
 
-    <!-- 数据概览卡片 -->
-    <view class="stats-section">
+    <view class="section">
+      <view class="section-header">
+        <text class="section-title">今日概况</text>
+      </view>
       <view class="stats-grid">
-        <view class="stat-card" v-for="(item, index) in metrics" :key="item.key" :class="{ featured: index === 0 }">
-          <view class="stat-content">
-            <text class="stat-value">{{ item.value }}</text>
-            <text class="stat-label">{{ item.label }}</text>
-          </view>
-          <view class="stat-decoration" />
+        <view class="stat-card" v-for="(item, index) in homeOverviewItems" :key="item.key" :class="{ featured: index === 0 }">
+          <text class="stat-value">{{ item.value }}</text>
+          <text class="stat-label">{{ item.label }}</text>
         </view>
       </view>
     </view>
 
-    <!-- 快捷操作 -->
     <view class="section">
       <view class="section-header">
-        <text class="section-title">快捷操作</text>
-        <text class="section-more">查看全部</text>
+        <text class="section-title">快速操作</text>
       </view>
       <view class="action-grid">
-        <view class="action-item" v-for="item in tools" :key="item.key">
+        <view class="action-item" v-for="item in homeQuickActions" :key="item.key" @click="goByAction(item.route)">
           <view class="action-icon">
-            <uni-icons :type="item.icon" size="24" color="#00c896" />
+            <uni-icons :type="item.icon" size="22" color="#00c896" />
           </view>
           <text class="action-title">{{ item.name }}</text>
           <text class="action-desc">{{ item.desc }}</text>
@@ -42,17 +33,29 @@
       </view>
     </view>
 
-    <!-- 今日任务 -->
     <view class="section">
       <view class="section-header">
-        <text class="section-title">今日任务</text>
-        <view class="task-count">{{ todos.length }} 项</view>
+        <text class="section-title">数据趋势简报</text>
       </view>
-      <view class="task-list">
-        <view class="task-item" v-for="todo in todos" :key="todo.id">
-          <view class="task-status" />
-          <text class="task-content">{{ todo.text }}</text>
-          <text class="task-time">即将到期</text>
+      <view class="trend-card">
+        <view class="trend-summary">
+          <view class="trend-item">
+            <text class="trend-label">本周服务家庭数</text>
+            <text class="trend-value">{{ weekFamilyTotal }}</text>
+          </view>
+          <view class="trend-item">
+            <text class="trend-label">本月入户次数</text>
+            <text class="trend-value">{{ monthVisitTotal }}</text>
+          </view>
+        </view>
+        <view class="bar-list">
+          <view class="bar-item" v-for="point in homeTrendPoints" :key="point.week">
+            <view class="bar-wrap">
+              <view class="bar-column" :style="{ height: `${point.familyCount * 7}rpx` }" />
+              <view class="bar-line-dot" :style="{ bottom: `${point.visitCount * 7}rpx` }" />
+            </view>
+            <text class="bar-label">{{ point.week }}</text>
+          </view>
         </view>
       </view>
     </view>
@@ -60,257 +63,209 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed } from "vue";
 import PageContainer from "../../components/common/PageContainer.vue";
 import UniPageHead from "../../components/common/UniPageHead.vue";
+import { usePageHeadCompact } from "../../composables/usePageHeadCompact";
+import { homeDateText, homeOverviewItems, homeQuickActions, homeTrendPoints } from "../../mock/home";
 
-interface MetricItem {
-  key: string;
-  label: string;
-  value: string;
-}
+const weekFamilyTotal = computed(() => homeTrendPoints.reduce((sum, item) => sum + item.familyCount, 0));
+const monthVisitTotal = computed(() => homeTrendPoints.reduce((sum, item) => sum + item.visitCount, 0) * 2);
+const { isPageHeadCompact } = usePageHeadCompact();
 
-interface ToolItem {
-  key: string;
-  name: string;
-  desc: string;
-  icon: string;
-}
+const tabRoutes = new Set(["/pages/home/index", "/pages/service-management/index", "/pages/parent-support/index", "/pages/mine/index"]);
 
-interface TodoItem {
-  id: string;
-  text: string;
-}
-
-const metrics = ref<MetricItem[]>([
-  { key: "todayVisits", label: "今日入户", value: "8" },
-  { key: "weekActivities", label: "本周活动", value: "3" },
-  { key: "monthFamilies", label: "本月家庭", value: "42" },
-]);
-
-const tools = ref<ToolItem[]>([
-  { key: "newVisit", name: "新建入户", desc: "记录家庭走访", icon: "home" },
-  { key: "schedule", name: "查看排班", desc: "今日工作安排", icon: "calendar" },
-  { key: "families", name: "家庭档案", desc: "管理家庭信息", icon: "person" },
-  { key: "activities", name: "活动组织", desc: "亲子活动安排", icon: "heart" },
-  { key: "resources", name: "教学资源", desc: "课程与材料", icon: "book" },
-  { key: "reports", name: "数据报表", desc: "工作统计分析", icon: "bar-chart" },
-]);
-
-const todos = ref<TodoItem[]>([
-  { id: "1", text: "9:00 李家入户指导（婴幼儿发育评估）" },
-  { id: "2", text: "14:00 亲子活动准备（感统训练）" },
-  { id: "3", text: "18:00 完成今日家庭跟进记录" },
-]);
+const goByAction = (route?: string) => {
+  if (!route) {
+    uni.showToast({ title: "功能建设中", icon: "none" });
+    return;
+  }
+  if (tabRoutes.has(route)) {
+    uni.switchTab({ url: route });
+    return;
+  }
+  uni.navigateTo({ url: route });
+};
 </script>
 
 <style scoped lang="scss">
-// 状态徽章样式
-.status-badge {
-  background: var(--gradient-primary);
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-sm);
+.date-chip {
+  font-size: var(--font-size-xs);
+  color: var(--color-primary);
+  background: var(--color-primary-light);
+  padding: 8rpx 14rpx;
+  border-radius: 999rpx;
 }
 
-.status-text {
-  color: white;
-  font-size: var(--font-size-sm);
-  font-weight: 500;
-}
-
-// 现代化数据卡片
-.stats-section {
+.section {
   margin-bottom: var(--spacing-xl);
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-md);
-}
-
-.stat-card {
-  position: relative;
-  background: var(--color-bg-card);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
-  box-shadow: var(--shadow-sm);
-  border: none;
-  overflow: hidden;
-  transition: all 0.3s ease;
-
-  &.featured {
-    background: var(--gradient-primary);
-
-    .stat-value,
-    .stat-label {
-      color: white;
-    }
-  }
-
-  &:hover {
-    transform: translateY(-2rpx);
-    box-shadow: var(--shadow-md);
-  }
-}
-
-.stat-content {
-  position: relative;
-  z-index: 2;
-}
-
-.stat-value {
-  display: block;
-  font-size: var(--font-size-xl);
-  font-weight: 700;
-  color: var(--color-text-primary);
-  line-height: 1.2;
-}
-
-.stat-label {
-  display: block;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-secondary);
-  margin-top: var(--spacing-xs);
-  font-weight: 500;
-}
-
-.stat-decoration {
-  position: absolute;
-  top: -20rpx;
-  right: -20rpx;
-  width: 80rpx;
-  height: 80rpx;
-  background: rgba(0, 200, 150, 0.1);
-  border-radius: 50%;
-  z-index: 1;
-}
-
-// 现代化区块样式
-.section {
-  margin-bottom: var(--spacing-xxl);
-}
-
 .section-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: var(--spacing-lg);
+  margin-bottom: var(--spacing-md);
 }
 
 .section-title {
   font-size: var(--font-size-lg);
+  color: var(--color-text-primary);
   font-weight: 600;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--spacing-md);
+}
+
+.stat-card {
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg) var(--spacing-md);
+  box-shadow: var(--shadow-xs);
+  min-height: 132rpx;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.stat-card.featured {
+  background: var(--gradient-primary);
+}
+
+.stat-card.featured .stat-value,
+.stat-card.featured .stat-label {
+  color: #ffffff;
+}
+
+.stat-value {
+  font-size: var(--font-size-xl);
+  font-weight: 700;
   color: var(--color-text-primary);
 }
 
-.section-more {
+.stat-label {
+  margin-top: var(--spacing-xs);
   font-size: var(--font-size-sm);
-  color: var(--color-primary);
-  font-weight: 500;
+  color: var(--color-text-secondary);
 }
 
-.task-count {
-  background: var(--color-primary-light);
-  color: var(--color-primary);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border-radius: var(--radius-md);
-  font-size: var(--font-size-xs);
-  font-weight: 500;
-}
-
-// 现代化操作网格
 .action-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--spacing-md);
 }
 
 .action-item {
+  min-height: 180rpx;
   background: var(--color-bg-card);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-lg);
   box-shadow: var(--shadow-xs);
-  border: none;
-  text-align: center;
-  transition: all 0.2s ease;
-
-  &:hover {
-    box-shadow: var(--shadow-sm);
-    transform: translateY(-1rpx);
-  }
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .action-icon {
-  width: 60rpx;
-  height: 60rpx;
-  background: var(--color-primary-light);
+  width: 64rpx;
+  height: 64rpx;
   border-radius: var(--radius-md);
+  background: var(--color-primary-light);
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 auto var(--spacing-sm);
 }
 
 .action-title {
-  display: block;
+  margin-top: var(--spacing-sm);
   font-size: var(--font-size-md);
-  font-weight: 600;
   color: var(--color-text-primary);
-  margin-bottom: var(--spacing-xs);
+  font-weight: 600;
 }
 
 .action-desc {
-  display: block;
+  margin-top: 6rpx;
   font-size: var(--font-size-xs);
-  color: var(--color-text-light);
+  color: var(--color-text-secondary);
   line-height: 1.4;
 }
 
-// 现代化任务列表
-.task-list {
+.trend-card {
   background: var(--color-bg-card);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
   box-shadow: var(--shadow-xs);
 }
 
-.task-item {
-  display: flex;
-  align-items: center;
-  padding: var(--spacing-md) var(--spacing-lg);
+.trend-summary {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.trend-item {
+  background: var(--color-primary-light);
   border-radius: var(--radius-md);
-  transition: all 0.2s ease;
-
-  &:hover {
-    background: var(--color-bg-hover);
-  }
-
-  &:not(:last-child) {
-    margin-bottom: var(--spacing-xs);
-  }
+  padding: var(--spacing-md);
 }
 
-.task-status {
-  width: 8rpx;
-  height: 8rpx;
-  background: var(--color-primary);
-  border-radius: 50%;
-  margin-right: var(--spacing-md);
-  flex-shrink: 0;
-}
-
-.task-content {
-  flex: 1;
-  font-size: var(--font-size-md);
-  color: var(--color-text-primary);
-  line-height: 1.4;
-}
-
-.task-time {
+.trend-label {
+  display: block;
   font-size: var(--font-size-xs);
-  color: var(--color-warning);
-  font-weight: 500;
+  color: var(--color-text-secondary);
+}
+
+.trend-value {
+  display: block;
+  margin-top: 6rpx;
+  font-size: var(--font-size-lg);
+  font-weight: 700;
+  color: var(--color-primary);
+}
+
+.bar-list {
+  height: 200rpx;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 6rpx;
+  align-items: end;
+}
+
+.bar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.bar-wrap {
+  position: relative;
+  width: 30rpx;
+  height: 150rpx;
+  display: flex;
+  align-items: end;
+}
+
+.bar-column {
+  width: 30rpx;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  background: var(--color-primary-light);
+  border: 1rpx solid var(--color-primary);
+}
+
+.bar-line-dot {
+  position: absolute;
+  left: 50%;
+  width: 14rpx;
+  height: 14rpx;
+  margin-left: -7rpx;
+  border-radius: 50%;
+  background: var(--color-primary);
+}
+
+.bar-label {
+  margin-top: 8rpx;
+  font-size: var(--font-size-xs);
+  color: var(--color-text-secondary);
 }
 </style>

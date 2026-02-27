@@ -6,9 +6,9 @@
         <text class="greeting-text">Hi，早上好！</text>
         <text class="greeting-subtitle">今天是个美好的一天 ✨</text>
       </view>
-      <view class="status-pill">
+      <!-- <view class="status-pill">
         <text class="status-text">今日排班</text>
-      </view>
+      </view> -->
     </view>
 
     <!-- 数据卡片组 -->

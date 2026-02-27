@@ -1,30 +1,32 @@
 <template>
   <PageContainer>
+    <UniPageHead title="我的" subtitle="教师信息、工作数据与系统设置" :compact="isPageHeadCompact" />
+
     <view class="profile-card">
       <view class="avatar-section">
         <view class="avatar">
-          <uni-icons type="person-filled" size="32" color="#2F8A5B" />
+          <uni-icons type="person-filled" size="32" color="#00c896" />
         </view>
         <view class="profile-info">
-          <view class="profile-name">{{ userInfo.name }}</view>
-          <view class="profile-role">{{ userInfo.role }}</view>
-          <view class="profile-location">{{ userInfo.location }}</view>
+          <view class="profile-name">{{ teacherProfile.name }}</view>
+          <view class="profile-role">{{ teacherProfile.role }}</view>
+          <view class="profile-location">{{ teacherProfile.organization }}</view>
+          <view class="profile-location">{{ teacherProfile.serviceArea }}</view>
         </view>
       </view>
-      <!-- <view class="cert-badge">持证上岗</view> -->
     </view>
 
     <view class="stats-overview">
-      <view class="stats-item" v-for="item in workStats" :key="item.key">
+      <view class="stats-item" v-for="item in workStatItems" :key="item.key">
         <view class="stats-number">{{ item.value }}</view>
         <view class="stats-label">{{ item.label }}</view>
       </view>
     </view>
 
-    <uni-card title="工作工具" :is-shadow="false">
-      <view class="menu-item" v-for="item in workTools" :key="item.key">
+    <uni-card title="数据导出" :is-shadow="false">
+      <view class="menu-item" v-for="item in exportActionItems" :key="item.key" @click="showMockTip(`${item.title}（mock）`)">
         <view class="menu-left">
-          <uni-icons :type="item.icon" size="22" color="#2F8A5B" />
+          <uni-icons :type="item.icon" size="22" color="#00c896" />
           <view class="menu-text">
             <view class="menu-title">{{ item.title }}</view>
             <view class="menu-desc">{{ item.desc }}</view>
@@ -35,7 +37,7 @@
     </uni-card>
 
     <uni-card title="系统设置" :is-shadow="false">
-      <view class="menu-item" v-for="item in systemMenus" :key="item.key">
+      <view class="menu-item" v-for="item in settingActionItems" :key="item.key" @click="showMockTip(`${item.title}（mock）`)">
         <view class="menu-left">
           <uni-icons :type="item.icon" size="22" color="#646A73" />
           <view class="menu-text">
@@ -50,53 +52,16 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import PageContainer from "../../components/common/PageContainer.vue";
+import UniPageHead from "../../components/common/UniPageHead.vue";
+import { usePageHeadCompact } from "../../composables/usePageHeadCompact";
+import { exportActionItems, settingActionItems, teacherProfile, workStatItems } from "../../mock/mine";
 
-interface UserInfo {
-  name: string;
-  role: string;
-  location: string;
-}
+const { isPageHeadCompact } = usePageHeadCompact();
 
-interface StatItem {
-  key: string;
-  value: string;
-  label: string;
-}
-
-interface MenuItem {
-  key: string;
-  title: string;
-  desc: string;
-  icon: string;
-}
-
-const userInfo = ref<UserInfo>({
-  name: "张老师",
-  role: "乡村早期教育指导教师",
-  location: "XX县XX镇工作站",
-});
-
-const workStats = ref<StatItem[]>([
-  { key: "families", value: "32", label: "服务家庭" },
-  { key: "visits", value: "128", label: "入户次数" },
-  { key: "activities", value: "24", label: "组织活动" },
-  { key: "records", value: "156", label: "成长记录" },
-]);
-
-const workTools = ref<MenuItem[]>([
-  { key: "data", title: "我的数据报表", desc: "查看工作统计与绩效", icon: "bars" },
-  { key: "schedule", title: "工作日程安排", desc: "管理入户和活动时间", icon: "calendar" },
-  { key: "materials", title: "教学资料库", desc: "课件模板与指导资源", icon: "folder" },
-]);
-
-const systemMenus = ref<MenuItem[]>([
-  { key: "settings", title: "账号设置", desc: "修改密码与个人信息", icon: "gear" },
-  { key: "help", title: "使用帮助", desc: "功能介绍与操作指南", icon: "help" },
-  { key: "feedback", title: "意见反馈", desc: "问题反馈与功能建议", icon: "chatbubble" },
-  { key: "about", title: "关于乡小育", desc: "版本信息与服务协议", icon: "info" },
-]);
+const showMockTip = (title: string) => {
+  uni.showToast({ title, icon: "none" });
+};
 </script>
 
 <style scoped lang="scss">
@@ -107,7 +72,7 @@ const systemMenus = ref<MenuItem[]>([
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-top: calc(var(--status-bar-height, 44rpx) + 54rpx);
+  margin-top: 12rpx;
 }
 
 .avatar-section {
