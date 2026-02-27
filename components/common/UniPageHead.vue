@@ -59,7 +59,7 @@ const handleBack = () => {
   right: var(--page-horizontal-padding, 44rpx);
   z-index: 50;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: space-between;
   padding-top: calc(var(--status-bar-height, 44rpx) + 88rpx);
   background: var(--color-bg-page);

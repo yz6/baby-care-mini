@@ -1,4 +1,4 @@
-import type { ExportActionItem, SettingActionItem, TeacherProfile, WorkStatItem } from "../types/mine";
+import type { ExportActionItem, ExportHistoryItem, SettingActionItem, TeacherProfile, WorkStatItem } from "../types/mine";
 
 export const teacherProfile: TeacherProfile = {
   name: "张老师",
@@ -24,4 +24,9 @@ export const settingActionItems: SettingActionItem[] = [
   { key: "notice", title: "通知设置", desc: "管理推送提醒与消息偏好", icon: "notification" },
   { key: "security", title: "账号安全", desc: "修改密码与登录保护", icon: "locked" },
   { key: "feedback", title: "意见反馈", desc: "提交问题与改进建议", icon: "chatbubble" },
+];
+
+export const exportHistoryItems: ExportHistoryItem[] = [
+  { id: "export-1", type: "入户记录", range: "2026-02-01 至 2026-02-29", createdAt: "2026-03-01 09:20" },
+  { id: "export-2", type: "活动记录", range: "2026-02-01 至 2026-02-29", createdAt: "2026-03-01 09:35" },
 ];

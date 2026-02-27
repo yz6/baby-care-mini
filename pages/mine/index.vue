@@ -22,7 +22,7 @@
     </view>
 
     <uni-card title="数据导出" :is-shadow="false">
-      <view class="menu-item" v-for="item in exportActionItems" :key="item.key" @click="showMockTip(`${item.title}（mock）`)">
+      <view class="menu-item" v-for="item in exportActionItems" :key="item.key" @click="goToExportCenter">
         <view class="menu-left">
           <uni-icons :type="item.icon" size="22" color="#00c896" />
           <view class="menu-text">
@@ -35,7 +35,7 @@
     </uni-card>
 
     <uni-card title="系统设置" :is-shadow="false">
-      <view class="menu-item" v-for="item in settingActionItems" :key="item.key" @click="showMockTip(`${item.title}（mock）`)">
+      <view class="menu-item" v-for="item in settingActionItems" :key="item.key" @click="goToSetting(item.key)">
         <view class="menu-left">
           <uni-icons :type="item.icon" size="22" color="#646A73" />
           <view class="menu-text">
@@ -53,8 +53,20 @@
 import PageContainer from "../../components/common/PageContainer.vue";
 import { exportActionItems, settingActionItems, teacherProfile, workStatItems } from "../../mock/mine";
 
-const showMockTip = (title: string) => {
-  uni.showToast({ title, icon: "none" });
+const goToExportCenter = () => {
+  uni.navigateTo({ url: "/pages/mine/export-center/index" });
+};
+
+const goToSetting = (key: string) => {
+  if (key === "notice") {
+    uni.navigateTo({ url: "/pages/mine/notice-settings/index" });
+    return;
+  }
+  if (key === "security") {
+    uni.navigateTo({ url: "/pages/mine/account-security/index" });
+    return;
+  }
+  uni.navigateTo({ url: "/pages/mine/feedback/index" });
 };
 </script>
 

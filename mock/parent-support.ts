@@ -1,4 +1,12 @@
-import type { ParentingLibraryItem, ParentingTutorialItem, PolicyFileItem, PushTargetItem } from "../types/parent-support";
+import type {
+  ParentingArticleForm,
+  ParentingLibraryItem,
+  ParentingTutorialItem,
+  PolicyFileItem,
+  PushRecordItem,
+  PushTargetItem,
+  TutorialVideoForm,
+} from "../types/parent-support";
 
 export const parentingLibraryItems: ParentingLibraryItem[] = [
   { id: "library-1", title: "7-12月动作发展家庭练习", monthRange: "7-12月", domain: "动作", hotTopic: "夜醒频繁", readCount: 168 },
@@ -21,4 +29,38 @@ export const pushTargets: PushTargetItem[] = [
   { id: "push-1", familyName: "李家" },
   { id: "push-2", familyName: "王家" },
   { id: "push-3", familyName: "陈家" },
+];
+
+export const parentingArticleDefaultForm: ParentingArticleForm = {
+  title: "",
+  monthRange: "13-18月",
+  domain: "语言",
+  hotTopic: "不爱说话",
+  content: "",
+};
+
+export const tutorialVideoDefaultForm: TutorialVideoForm = {
+  title: "",
+  monthRange: "13-24月",
+  topic: "语言发展",
+  activityType: "居家互动",
+  relatedFamily: "李家",
+  videoUrl: "",
+};
+
+export const pushRecordItems: PushRecordItem[] = [
+  {
+    id: "push-record-1",
+    mode: "定向推送",
+    content: "本周亲子活动提醒与家庭延伸练习",
+    sendTime: "2026-03-01 20:00",
+    targetFamilies: ["李家"],
+  },
+  {
+    id: "push-record-2",
+    mode: "批量推送",
+    content: "春季育儿文库专题合集",
+    sendTime: "2026-02-28 19:30",
+    targetFamilies: ["李家", "王家", "陈家"],
+  },
 ];

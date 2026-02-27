@@ -275,7 +275,6 @@ const goToPage = (route: string) => {
 
 .form-input {
   margin-top: 12rpx;
-  width: 100%;
   min-height: 88rpx;
   border-radius: var(--radius-md);
   border: 1rpx solid var(--color-border);

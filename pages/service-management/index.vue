@@ -4,8 +4,14 @@
 
     <view class="entry-grid">
       <view class="entry-card" v-for="item in serviceEntries" :key="item.key" @click="goToPage(item.route)">
-        <view class="entry-title">{{ item.title }}</view>
-        <view class="entry-desc">{{ item.desc }}</view>
+        <view class="entry-main">
+          <image class="entry-icon" :src="item.icon" mode="aspectFit" />
+          <view class="entry-text">
+            <view class="entry-title">{{ item.title }}</view>
+            <view class="entry-desc">{{ item.desc }}</view>
+          </view>
+        </view>
+        <uni-icons type="right" size="16" color="#98A2B3" />
       </view>
     </view>
 
@@ -30,15 +36,15 @@
         </view>
         <view class="service-meta">{{ item.family }} ｜ {{ item.planTime }}</view>
         <view class="service-actions">
-          <view class="action-btn">
+          <view class="action-btn" @click="goToServiceRecord(item)">
             <uni-icons type="compose" size="16" color="#2F8A5B" />
             <text>记录</text>
           </view>
-          <view class="action-btn">
+          <view class="action-btn" @click="handleContact(item)">
             <uni-icons type="phone" size="16" color="#2F8A5B" />
             <text>联系</text>
           </view>
-          <view class="action-btn">
+          <view class="action-btn" @click="handleNavigate(item)">
             <uni-icons type="location" size="16" color="#2F8A5B" />
             <text>导航</text>
           </view>
@@ -57,14 +63,33 @@ import { serviceStats, serviceTasks } from "../../mock/service-management";
 import type { ServiceStatus, ServiceTaskItem } from "../../types/service-management";
 
 type FilterTab = "all" | "homeVisit" | "activity";
+type ServiceContactMap = Record<string, { phone: string; latitude: number; longitude: number; address: string; locationName: string }>;
 
 const activeTab = ref<FilterTab>("all");
 const { isPageHeadCompact } = usePageHeadCompact();
 
 const serviceEntries = [
-  { key: "familyProfile", title: "家庭档案", desc: "查看家庭与婴幼儿基础信息", route: "/pages/service-management/family-profile/index" },
-  { key: "homeVisit", title: "入户指导", desc: "预约管理、发育记录与量表匹配", route: "/pages/service-management/home-visit/index" },
-  { key: "parentActivity", title: "亲子活动", desc: "活动方案、发布与活动反馈", route: "/pages/service-management/parent-activity/index" },
+  {
+    key: "familyProfile",
+    title: "家庭档案",
+    desc: "查看家庭与婴幼儿基础信息",
+    icon: "/static/icon/家庭档案.png",
+    route: "/pages/service-management/family-profile/index",
+  },
+  {
+    key: "homeVisit",
+    title: "入户指导",
+    desc: "预约管理、发育记录与量表匹配",
+    icon: "/static/icon/入户指导.png",
+    route: "/pages/service-management/home-visit/index",
+  },
+  {
+    key: "parentActivity",
+    title: "亲子活动",
+    desc: "活动方案、发布与活动反馈",
+    icon: "/static/icon/亲子活动.png",
+    route: "/pages/service-management/parent-activity/index",
+  },
 ] as const;
 
 const filterTabs = [
@@ -74,11 +99,35 @@ const filterTabs = [
 ] as const;
 
 const stats = serviceStats;
+const serviceContactMap: ServiceContactMap = {
+  "service-1": {
+    phone: "13800001234",
+    latitude: 30.274085,
+    longitude: 120.15507,
+    address: "北山村3组18号",
+    locationName: "李家入户点",
+  },
+  "service-2": {
+    phone: "13800007890",
+    latitude: 30.279998,
+    longitude: 120.161111,
+    address: "村活动室",
+    locationName: "村活动室",
+  },
+  "service-3": {
+    phone: "13800004567",
+    latitude: 30.268888,
+    longitude: 120.149999,
+    address: "东河村2组5号",
+    locationName: "王家入户点",
+  },
+};
 
 const statusTextMap: Record<ServiceStatus, string> = {
   pending: "待确认",
   confirmed: "已确认",
   done: "已完成",
+  cancelled: "已取消",
 };
 
 const filteredServices = computed(() => {
@@ -91,6 +140,46 @@ const filteredServices = computed(() => {
 const goToPage = (route: string) => {
   uni.navigateTo({ url: route });
 };
+
+const goToServiceRecord = (item: ServiceTaskItem) => {
+  if (item.type === "homeVisit") {
+    uni.navigateTo({ url: "/pages/service-management/home-visit/record-edit" });
+    return;
+  }
+  uni.navigateTo({ url: "/pages/service-management/parent-activity/feedback-detail?id=feedback-1" });
+};
+
+const handleContact = (item: ServiceTaskItem) => {
+  const contact = serviceContactMap[item.id];
+  if (!contact?.phone) {
+    uni.showToast({ title: "暂无联系电话（mock）", icon: "none" });
+    return;
+  }
+  uni.makePhoneCall({
+    phoneNumber: contact.phone,
+    fail: () => {
+      uni.showToast({ title: `拨号失败，模拟联系：${contact.phone}`, icon: "none" });
+    },
+  });
+};
+
+const handleNavigate = (item: ServiceTaskItem) => {
+  const contact = serviceContactMap[item.id];
+  if (!contact) {
+    uni.showToast({ title: "暂无导航地址（mock）", icon: "none" });
+    return;
+  }
+  uni.openLocation({
+    latitude: contact.latitude,
+    longitude: contact.longitude,
+    name: contact.locationName,
+    address: contact.address,
+    scale: 16,
+    fail: () => {
+      uni.showToast({ title: `导航失败，模拟目的地：${contact.address}`, icon: "none" });
+    },
+  });
+};
 </script>
 
 <style scoped lang="scss">
@@ -102,11 +191,34 @@ const goToPage = (route: string) => {
 }
 
 .entry-card {
-  min-height: 96rpx;
+  min-height: 132rpx;
   border-radius: var(--radius-md);
   background: var(--color-bg-card);
   border: 1rpx solid var(--color-border);
   padding: 18rpx;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--shadow-xs);
+}
+
+.entry-main {
+  display: flex;
+  align-items: center;
+  gap: 14rpx;
+  flex: 1;
+}
+
+.entry-icon {
+  width: 64rpx;
+  height: 64rpx;
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-page);
+  flex-shrink: 0;
+}
+
+.entry-text {
+  flex: 1;
 }
 
 .entry-title {
@@ -214,6 +326,11 @@ const goToPage = (route: string) => {
 .status-tag.done {
   color: #2a7f56;
   background: #e8f7ef;
+}
+
+.status-tag.cancelled {
+  color: #8a8f99;
+  background: #f3f4f6;
 }
 
 .service-actions {

@@ -23,8 +23,9 @@
       <view class="detail-row">时间段：{{ selectedAppointment.appointmentSlot }}</view>
       <view class="detail-row">预约状态：{{ statusTextMap[selectedAppointment.status] }}</view>
       <view class="btn-row">
-        <button class="action-btn" size="mini" @click="showMockTip('已更新预约状态（mock）')">修改预约</button>
-        <button class="action-btn" size="mini" @click="showMockTip('已取消预约（mock）')">取消预约</button>
+        <button class="action-btn" size="mini" @click="goToAppointmentEdit">修改预约</button>
+        <button class="action-btn danger" size="mini" @click="cancelAppointment">取消预约</button>
+        <button class="action-btn" size="mini" @click="goToRecordEdit">填写记录</button>
       </view>
     </uni-card>
 
@@ -35,6 +36,7 @@
         <text>体重 {{ item.weightKg }}kg</text>
         <text>头围 {{ item.headCircumferenceCm }}cm</text>
       </view>
+      <button class="link-btn" @click="goToGrowthCurve">查看生长曲线</button>
     </uni-card>
 
     <uni-card title="发展特点记录" :is-shadow="false">
@@ -45,6 +47,7 @@
         </view>
       </view>
       <textarea class="remark-input" placeholder="补充记录：勾选维度外的观察内容（mock）" />
+      <button class="link-btn" @click="goToScaleDetail">进入评价量表</button>
     </uni-card>
   </PageContainer>
 </template>
@@ -68,6 +71,7 @@ const statusTextMap: Record<ServiceStatus, string> = {
   pending: "待确认",
   confirmed: "已确认",
   done: "已完成",
+  cancelled: "已取消",
 };
 
 const calculateMonthAge = (birthday: string) => {
@@ -80,29 +84,56 @@ const calculateMonthAge = (birthday: string) => {
 
 const currentMonthAge = computed(() => calculateMonthAge(selectedAppointment.value.birthday));
 
-const matchedScaleRange = computed(() => {
+const scaleRange = computed(() => {
   const age = currentMonthAge.value;
   if (age <= 6) {
-    return "0-6月龄评价量表";
+    return "0-6月龄";
   }
   if (age <= 12) {
-    return "7-12月龄评价量表";
+    return "7-12月龄";
   }
   if (age <= 18) {
-    return "13-18月龄评价量表";
+    return "13-18月龄";
   }
   if (age <= 24) {
-    return "19-24月龄评价量表";
+    return "19-24月龄";
   }
-  return "25-36月龄评价量表";
+  return "25-36月龄";
 });
+const matchedScaleRange = computed(() => `${scaleRange.value}评价量表`);
 
 const handleFamilyChange = (event: { detail: { value: string } }) => {
   selectedIndex.value = Number(event.detail.value);
 };
 
-const showMockTip = (title: string) => {
-  uni.showToast({ title, icon: "none" });
+const goToAppointmentEdit = () => {
+  uni.navigateTo({ url: `/pages/service-management/home-visit/appointment-edit?id=${selectedAppointment.value.id}` });
+};
+
+const cancelAppointment = () => {
+  uni.showModal({
+    title: "确认取消预约",
+    content: "取消后该预约将标记为“已取消”，是否继续？",
+    success: ({ confirm }) => {
+      if (!confirm) {
+        return;
+      }
+      selectedAppointment.value.status = "cancelled";
+      uni.showToast({ title: "预约已取消", icon: "none" });
+    },
+  });
+};
+
+const goToRecordEdit = () => {
+  uni.navigateTo({ url: "/pages/service-management/home-visit/record-edit" });
+};
+
+const goToGrowthCurve = () => {
+  uni.navigateTo({ url: "/pages/service-management/home-visit/growth-curve" });
+};
+
+const goToScaleDetail = () => {
+  uni.navigateTo({ url: `/pages/service-management/home-visit/scale-detail?range=${encodeURIComponent(scaleRange.value)}` });
 };
 </script>
 
@@ -137,6 +168,12 @@ const showMockTip = (title: string) => {
   color: var(--color-primary);
   border: 1rpx solid var(--color-primary-light);
   background: var(--color-primary-light);
+}
+
+.action-btn.danger {
+  color: #b26a00;
+  border-color: #ffe4b5;
+  background: #fff8ed;
 }
 
 .growth-row {
@@ -186,5 +223,16 @@ const showMockTip = (title: string) => {
   border-radius: var(--radius-md);
   padding: 12rpx;
   font-size: var(--font-size-sm);
+}
+
+.link-btn {
+  margin-top: 12rpx;
+  min-height: 72rpx;
+  line-height: 72rpx;
+  border-radius: 999rpx;
+  background: var(--color-primary-light);
+  border: 1rpx solid var(--color-primary-light);
+  color: var(--color-primary-dark);
+  font-size: var(--font-size-xs);
 }
 </style>

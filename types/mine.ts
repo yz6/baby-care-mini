@@ -24,3 +24,10 @@ export interface SettingActionItem {
   desc: string;
   icon: string;
 }
+
+export interface ExportHistoryItem {
+  id: string;
+  type: "入户记录" | "活动记录" | "家庭发展报告";
+  range: string;
+  createdAt: string;
+}

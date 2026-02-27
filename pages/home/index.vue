@@ -60,7 +60,7 @@ import { usePageHeadCompact } from "../../composables/usePageHeadCompact";
 import { homeDateText, homeOverviewItems, homeQuickActions, homeTrendPoints } from "../../mock/home";
 
 const weekFamilyTotal = computed(() => homeTrendPoints.reduce((sum, item) => sum + item.familyCount, 0));
-const monthVisitTotal = computed(() => homeTrendPoints.reduce((sum, item) => sum + item.visitCount, 0) * 2);
+const monthVisitTotal = computed(() => homeTrendPoints.reduce((sum, item) => sum + item.visitCount, 0));
 const { isPageHeadCompact } = usePageHeadCompact();
 
 const tabRoutes = new Set(["/pages/home/index", "/pages/service-management/index", "/pages/parent-support/index", "/pages/mine/index"]);

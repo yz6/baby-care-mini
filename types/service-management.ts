@@ -1,4 +1,4 @@
-export type ServiceStatus = "pending" | "confirmed" | "done";
+export type ServiceStatus = "pending" | "confirmed" | "done" | "cancelled";
 
 export type ServiceTaskType = "homeVisit" | "activity";
 
@@ -71,4 +71,57 @@ export interface ActivityRecordItem {
   title: string;
   observation: string;
   familySuggestion: string;
+}
+
+export interface FamilyVisitHistoryItem {
+  id: string;
+  date: string;
+  summary: string;
+}
+
+export interface FamilyActivityHistoryItem {
+  id: string;
+  date: string;
+  title: string;
+  result: string;
+}
+
+export interface FamilyProfileDetail extends FamilyProfileItem {
+  growthFeature: string;
+  developmentFeature: string;
+  homeVisitHistory: FamilyVisitHistoryItem[];
+  activityHistory: FamilyActivityHistoryItem[];
+}
+
+export interface HomeVisitRecordForm {
+  familyCode: string;
+  visitDate: string;
+  visitTimeSlot: string;
+  actionDevelopment: string;
+  languageDevelopment: string;
+  cognitionDevelopment: string;
+  emotionalDevelopment: string;
+  teacherConclusion: string;
+}
+
+export interface ScaleQuestionItem {
+  id: string;
+  question: string;
+  scoreOptions: number[];
+}
+
+export interface ScaleTemplateItem {
+  range: "0-6月龄" | "7-12月龄" | "13-18月龄" | "19-24月龄" | "25-36月龄";
+  title: string;
+  questions: ScaleQuestionItem[];
+}
+
+export interface ActivityFeedbackDetail {
+  id: string;
+  title: string;
+  date: string;
+  participantFamilies: string[];
+  observation: string;
+  familySuggestion: string;
+  summary: string;
 }

@@ -1,11 +1,13 @@
 <template>
   <view class="trend-chart-wrap">
-    <canvas class="trend-canvas" canvas-id="homeTrendCanvas" id="homeTrendCanvas" />
+    <canvas v-if="hasData && !chartErrorMessage" class="trend-canvas" canvas-id="homeTrendCanvas" id="homeTrendCanvas" />
+    <view v-else-if="!hasData" class="chart-empty">暂无趋势数据</view>
+    <view v-else class="chart-empty">{{ chartErrorMessage }}</view>
   </view>
 </template>
 
 <script setup lang="ts">
-import { computed, getCurrentInstance, nextTick, onMounted, watch } from "vue";
+import { computed, getCurrentInstance, nextTick, onMounted, ref, watch } from "vue";
 import UCharts from "@qiun/ucharts";
 import type { HomeTrendPoint } from "../../types/home";
 
@@ -15,6 +17,8 @@ interface Props {
 
 const props = defineProps<Props>();
 const vmProxy = getCurrentInstance()?.proxy as unknown;
+const chartErrorMessage = ref("");
+const hasData = computed(() => props.points.length > 0);
 
 const chartWidth = computed(() => {
   const windowWidth = uni.getSystemInfoSync().windowWidth;
@@ -23,6 +27,9 @@ const chartWidth = computed(() => {
 const chartHeight = uni.upx2px(320);
 
 const drawChart = () => {
+  if (!hasData.value) {
+    return;
+  }
   const context = uni.createCanvasContext("homeTrendCanvas", vmProxy as any);
   const categories = props.points.map((item) => item.week);
   const maxDataValue = Math.max(
@@ -48,62 +55,68 @@ const drawChart = () => {
   ];
 
   // uCharts 在小程序端需要 $this 才能正确找到 canvas 节点。
-  new (UCharts as any)({
-    context,
-    $this: vmProxy,
-    canvasId: "homeTrendCanvas",
-    type: "mix",
-    categories,
-    series,
-    width: chartWidth.value,
-    height: chartHeight,
-    background: "#FFFFFF",
-    pixelRatio: 1,
-    animation: true,
-    legend: {
-      show: true,
-      position: "bottom",
-      float: "center",
-    },
-    xAxis: {
-      disableGrid: true,
-      fontColor: "#646A73",
-    },
-    yAxis: {
-      min: 0,
-      max: yAxisMax,
-      splitNumber: yAxisSplitNumber,
-      tofix: 0,
-      formatter: (val: number) => `${Math.round(val)}`,
-      gridType: "dash",
-      dashLength: 2,
-      fontColor: "#646A73",
-      data: [
-        {
-          min: 0,
-          max: yAxisMax,
-          tofix: 0,
-          formatter: (val: number) => `${Math.round(val)}`,
-        },
-      ],
-    },
-    extra: {
-      mix: {
-        column: {
-          width: 18,
-          seriesGap: 2,
-          categoryGap: 2,
-        },
-        line: {
-          type: "curve",
-          width: 2,
-        },
-        area: {
-          opacity: 0,
+  try {
+    chartErrorMessage.value = "";
+    new (UCharts as any)({
+      context,
+      $this: vmProxy,
+      canvasId: "homeTrendCanvas",
+      type: "mix",
+      categories,
+      series,
+      width: chartWidth.value,
+      height: chartHeight,
+      background: "#FFFFFF",
+      pixelRatio: 1,
+      animation: true,
+      legend: {
+        show: true,
+        position: "bottom",
+        float: "center",
+      },
+      xAxis: {
+        disableGrid: true,
+        fontColor: "#646A73",
+      },
+      yAxis: {
+        min: 0,
+        max: yAxisMax,
+        splitNumber: yAxisSplitNumber,
+        tofix: 0,
+        formatter: (val: number) => `${Math.round(val)}`,
+        gridType: "dash",
+        dashLength: 2,
+        fontColor: "#646A73",
+        data: [
+          {
+            min: 0,
+            max: yAxisMax,
+            tofix: 0,
+            formatter: (val: number) => `${Math.round(val)}`,
+          },
+        ],
+      },
+      extra: {
+        mix: {
+          column: {
+            width: 18,
+            seriesGap: 2,
+            categoryGap: 2,
+          },
+          line: {
+            type: "curve",
+            width: 2,
+          },
+          area: {
+            opacity: 0,
+          },
         },
       },
-    },
-  });
+    });
+  } catch (error) {
+    console.error("HomeTrendChart draw failed:", error);
+    chartErrorMessage.value = "图表加载失败，请稍后重试";
+  }
 };
 
 onMounted(async () => {
@@ -129,5 +142,17 @@ watch(
 .trend-canvas {
   width: 100%;
   height: 320rpx;
+}
+
+.chart-empty {
+  height: 320rpx;
+  border-radius: var(--radius-md);
+  background: var(--color-bg-page);
+  border: 1rpx dashed var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
 }
 </style>

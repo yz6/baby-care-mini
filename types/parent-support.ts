@@ -30,3 +30,28 @@ export interface PushTargetItem {
   id: string;
   familyName: string;
 }
+
+export interface ParentingArticleForm {
+  title: string;
+  monthRange: string;
+  domain: string;
+  hotTopic: string;
+  content: string;
+}
+
+export interface TutorialVideoForm {
+  title: string;
+  monthRange: string;
+  topic: string;
+  activityType: string;
+  relatedFamily: string;
+  videoUrl: string;
+}
+
+export interface PushRecordItem {
+  id: string;
+  mode: "定向推送" | "批量推送" | "定时推送";
+  content: string;
+  sendTime: string;
+  targetFamilies: string[];
+}

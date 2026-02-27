@@ -20,7 +20,7 @@
       <view class="filter-chip" :class="{ active: selectedFilter === '19-36' }" @click="selectedFilter = '19-36'">19-36月</view>
     </view>
 
-    <uni-card v-for="item in viewFamilyProfiles" :key="item.id" :is-shadow="false">
+    <uni-card v-for="item in viewFamilyProfiles" :key="item.id" :is-shadow="false" @click="goToDetail(item.id)">
       <view class="card-title">{{ item.familyCode }} · {{ item.parentName }}</view>
       <view class="card-row">{{ item.phone }} ｜ {{ item.address }}</view>
       <view class="card-row">婴幼儿：{{ item.childName }} ｜ 出生日期：{{ item.birthday }} ｜ 月龄：{{ item.monthAge }}</view>
@@ -70,6 +70,10 @@ const viewFamilyProfiles = computed(() => {
 
 const handleSortChange = (event: { detail: { value: string } }) => {
   sortIndex.value = Number(event.detail.value);
+};
+
+const goToDetail = (id: string) => {
+  uni.navigateTo({ url: `/pages/service-management/family-profile/detail?id=${id}` });
 };
 </script>
 
