@@ -7,6 +7,16 @@
       <button class="publish-btn" size="mini" @click="goToArticleEdit">发布文章</button>
     </view>
 
+    <uni-card title="文档阅读" :is-shadow="false">
+      <view class="doc-row" v-for="item in parentingLibraryDocuments" :key="item.id">
+        <view class="doc-main">
+          <view class="library-title">{{ item.title }}</view>
+          <view class="library-meta">格式：{{ item.fileType.toUpperCase() }}</view>
+        </view>
+        <button class="doc-open-btn" size="mini" @click="goToDocumentReader(item.id)">阅读</button>
+      </view>
+    </uni-card>
+
     <uni-card title="筛选条件" :is-shadow="false">
       <view class="chip-row">
         <view class="chip-item" :class="{ active: activeFilter === 'all' }" @click="activeFilter = 'all'">全部</view>
@@ -36,7 +46,7 @@ import { computed, ref } from "vue";
 import PageContainer from "../../../components/common/PageContainer.vue";
 import UniPageHead from "../../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
-import { parentingLibraryItems } from "../../../mock/parent-support";
+import { parentingLibraryDocuments, parentingLibraryItems } from "../../../mock/parent-support";
 
 const { isPageHeadCompact } = usePageHeadCompact();
 const searchKeyword = ref("");
@@ -63,6 +73,10 @@ const hotTopicText = computed(() => filteredItems.value[0]?.hotTopic || "暂无"
 
 const goToArticleEdit = () => {
   uni.navigateTo({ url: "/pages/parent-support/parenting-library/article-edit" });
+};
+
+const goToDocumentReader = (id: string) => {
+  uni.navigateTo({ url: `/pages/parent-support/parenting-library/document-reader?id=${id}` });
 };
 
 const mockPushArticle = () => {
@@ -104,6 +118,36 @@ const mockPushArticle = () => {
 .chip-row {
   display: flex;
   gap: 8rpx;
+}
+
+.doc-row {
+  min-height: 88rpx;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10rpx;
+}
+
+.doc-row:last-child {
+  border-bottom: none;
+}
+
+.doc-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.doc-open-btn {
+  min-height: 64rpx;
+  line-height: 64rpx;
+  border-radius: 999rpx;
+  padding: 0 16rpx;
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-dark);
+  background: var(--color-primary-light);
+  border: 1rpx solid var(--color-primary-light);
 }
 
 .chip-item {

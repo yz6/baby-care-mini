@@ -10,6 +10,16 @@
     </view>
 
     <uni-card title="育儿文库" :is-shadow="false">
+      <view class="library-doc-section">
+        <view class="library-doc-section-title">文档阅读</view>
+        <view class="library-doc-item" v-for="item in parentingLibraryDocuments" :key="item.id">
+          <view class="library-doc-main">
+            <view class="library-doc-title">{{ item.title }}</view>
+            <view class="library-meta">格式：{{ item.fileType.toUpperCase() }}</view>
+          </view>
+          <button class="library-doc-btn" size="mini" @click="handleOpenLibraryDocument(item)">在线阅读</button>
+        </view>
+      </view>
       <view class="segment-row">
         <view v-for="item in libraryTabs" :key="item.key" class="segment-item" :class="{ active: item.key === activeLibraryTab }" @click="activeLibraryTab = item.key">
           {{ item.label }}
@@ -37,7 +47,7 @@
           <view class="policy-meta">{{ item.category }}</view>
         </view>
         <view class="policy-actions">
-          <text class="policy-btn" @click="showMockTip('在线阅读（mock）')">在线阅读</text>
+          <text class="policy-btn" @click="showMockTip('在线阅读（mock）')">阅读</text>
           <text class="policy-btn" @click="showMockTip('开始下载（mock）')">下载</text>
           <text class="policy-btn" @click="handlePolicyCollect(item.id)">{{ item.collect ? "已收藏" : "收藏" }}</text>
         </view>
@@ -65,8 +75,8 @@ import { computed, reactive, ref } from "vue";
 import PageContainer from "../../components/common/PageContainer.vue";
 import UniPageHead from "../../components/common/UniPageHead.vue";
 import { usePageHeadCompact } from "../../composables/usePageHeadCompact";
-import { addPushRecordItem, parentingLibraryItems, parentingTutorialItems, policyFileItems, pushTargets, togglePolicyCollect } from "../../mock/parent-support";
-import type { ParentingLibraryItem } from "../../types/parent-support";
+import { addPushRecordItem, parentingLibraryDocuments, parentingLibraryItems, parentingTutorialItems, policyFileItems, pushTargets, togglePolicyCollect } from "../../mock/parent-support";
+import type { ParentingLibraryDocumentItem, ParentingLibraryItem } from "../../types/parent-support";
 
 type LibraryTabKey = "all" | "monthRange" | "domain" | "hotTopic";
 
@@ -102,6 +112,40 @@ const pushForm = reactive({
 
 const showMockTip = (title: string) => {
   uni.showToast({ title, icon: "none" });
+};
+
+const handleOpenLibraryDocument = async (item: ParentingLibraryDocumentItem) => {
+  try {
+    uni.showLoading({ title: "文档加载中..." });
+    const downloadedFilePath = await new Promise<string>((resolve, reject) => {
+      uni.downloadFile({
+        url: item.fileUrl,
+        success: (downloadResult) => {
+          if (downloadResult.statusCode === 200) {
+            resolve(downloadResult.tempFilePath);
+            return;
+          }
+          reject(new Error(`download status ${downloadResult.statusCode}`));
+        },
+        fail: reject,
+      });
+    });
+
+    await new Promise<void>((resolve, reject) => {
+      uni.openDocument({
+        filePath: downloadedFilePath,
+        fileType: item.fileType,
+        showMenu: true,
+        success: () => resolve(),
+        fail: reject,
+      });
+    });
+  } catch (error) {
+    console.error("open library document failed", error);
+    uni.showToast({ title: "打开失败，请稍后重试", icon: "none" });
+  } finally {
+    uni.hideLoading();
+  }
 };
 
 const handlePolicyCollect = (policyId: string) => {
@@ -196,6 +240,52 @@ const goToPage = (route: string) => {
 
 .library-item:last-child {
   border-bottom: none;
+}
+
+.library-doc-section {
+  margin-top: 14rpx;
+  padding-top: 14rpx;
+  border-top: 1rpx solid var(--color-border);
+}
+
+.library-doc-section-title {
+  font-size: 26rpx;
+  color: var(--color-text-secondary);
+}
+
+.library-doc-item {
+  margin-top: 12rpx;
+  min-height: 88rpx;
+  border-radius: var(--radius-md);
+  border: 1rpx solid var(--color-border);
+  background: var(--color-bg-page);
+  padding: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12rpx;
+}
+
+.library-doc-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.library-doc-title {
+  font-size: 28rpx;
+  color: var(--color-text-primary);
+  font-weight: 600;
+}
+
+.library-doc-btn {
+  min-height: 72rpx;
+  line-height: 72rpx;
+  border-radius: 999rpx;
+  padding: 0 18rpx;
+  font-size: var(--font-size-xs);
+  color: var(--color-primary-dark);
+  background: var(--color-primary-light);
+  border: 1rpx solid var(--color-primary-light);
 }
 
 .library-title {

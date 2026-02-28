@@ -45,13 +45,6 @@
       <view class="form-label biz-form-label">活动地点</view>
       <input v-model="publishForm.location" class="form-input biz-form-input" placeholder="请输入活动地点" />
 
-      <view class="form-label biz-form-label">参与家庭（多选）</view>
-      <checkbox-group class="option-row biz-option-row" @change="handleFamilySelectChange">
-        <label class="option-item biz-option-item" v-for="item in familyOptions" :key="item">
-          <checkbox :value="item" :checked="selectedFamilies.includes(item)" color="#00c896" style="transform:scale(0.8)" />
-          <text>{{ item }}</text>
-        </label>
-      </checkbox-group>
       <button class="publish-btn biz-submit-btn" @click="submitPublish">一键发布</button>
     </uni-card>
 
@@ -76,8 +69,6 @@ const publishForm = reactive({
   location: "",
 });
 const selectedPlanId = ref("");
-const familyOptions = ["李家", "王家", "陈家", "赵家"];
-const selectedFamilies = ref<string[]>([]);
 
 const showMockTip = (title: string) => {
   uni.showToast({ title, icon: "none" });
@@ -92,14 +83,10 @@ const submitPublish = () => {
     uni.showToast({ title: "请选择活动方案", icon: "none" });
     return;
   }
-  if (selectedFamilies.value.length === 0) {
-    uni.showToast({ title: "请至少选择一个参与家庭", icon: "none" });
-    return;
-  }
   addActivityRecord({
     date: publishForm.activityDate,
     title: publishForm.title,
-    observation: `活动时间 ${publishForm.activityTime}，地点 ${publishForm.location}，参与家庭：${selectedFamilies.value.join("、")}。`,
+    observation: `活动时间 ${publishForm.activityTime}，地点 ${publishForm.location}。`,
     familySuggestion: "建议活动后 24 小时内完成一次家庭延伸练习并记录反馈。",
   });
   uni.showToast({ title: "活动发布成功", icon: "none" });
@@ -116,10 +103,6 @@ const handleActivityDateChange = (event: { detail: { value: string } }) => {
 
 const handleActivityTimeChange = (event: { detail: { value: string } }) => {
   publishForm.activityTime = event.detail.value;
-};
-
-const handleFamilySelectChange = (event: { detail: { value: string[] } }) => {
-  selectedFamilies.value = event.detail.value;
 };
 
 const goToPlanDetail = (id: string) => {
@@ -236,21 +219,6 @@ const goToPlanDetail = (id: string) => {
 .form-label {
   margin: 6rpx 0 8rpx;
   font-size: var(--font-size-sm);
-  color: var(--color-text-secondary);
-}
-
-.option-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8rpx 12rpx;
-  margin-bottom: 12rpx;
-}
-
-.option-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 4rpx;
-  font-size: var(--font-size-xs);
   color: var(--color-text-secondary);
 }
 

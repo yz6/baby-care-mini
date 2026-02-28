@@ -133,6 +133,12 @@
       }
     },
     {
+      "path": "pages/parent-support/parenting-library/document-reader",
+      "style": {
+        "navigationStyle": "custom"
+      }
+    },
+    {
       "path": "pages/parent-support/parenting-tutorial/video-edit",
       "style": {
         "navigationStyle": "custom"

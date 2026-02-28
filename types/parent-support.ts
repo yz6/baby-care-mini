@@ -9,6 +9,13 @@ export interface ParentingLibraryItem {
   readCount: number;
 }
 
+export interface ParentingLibraryDocumentItem {
+  id: string;
+  title: string;
+  fileType: "pdf" | "doc" | "docx" | "xls" | "xlsx" | "ppt" | "pptx";
+  fileUrl: string;
+}
+
 export interface ParentingTutorialItem {
   id: string;
   title: string;

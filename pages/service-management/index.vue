@@ -105,7 +105,7 @@ const serviceContactMap: ServiceContactMap = {
     latitude: 30.274085,
     longitude: 120.15507,
     address: "北山村3组18号",
-    locationName: "李家入户点",
+    locationName: "家庭入户点A",
   },
   "service-2": {
     phone: "13800007890",
@@ -119,7 +119,7 @@ const serviceContactMap: ServiceContactMap = {
     latitude: 30.268888,
     longitude: 120.149999,
     address: "东河村2组5号",
-    locationName: "王家入户点",
+    locationName: "家庭入户点B",
   },
 };
 

@@ -63,7 +63,7 @@ const sendDate = ref("");
 const sendClock = ref("");
 const pushModeOptions: PushRecordItem["mode"][] = ["定向推送", "批量推送", "定时推送"];
 const selectedMode = ref<PushRecordItem["mode"]>("定向推送");
-const selectedTargets = ref<string[]>(["李家"]);
+const selectedTargets = ref<string[]>([pushTargets[0]?.familyName || ""]);
 const channelOptions = ["App消息", "短信", "公众号"];
 const selectedChannels = ref<string[]>(["App消息"]);
 
