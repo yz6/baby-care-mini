@@ -7,13 +7,13 @@
       <button class="publish-btn" size="mini" @click="goToArticleEdit">发布文章</button>
     </view>
 
-    <uni-card title="文档阅读" :is-shadow="false">
+    <uni-card title="文档查看" :is-shadow="false">
       <view class="doc-row" v-for="item in parentingLibraryDocuments" :key="item.id">
         <view class="doc-main">
           <view class="library-title">{{ item.title }}</view>
           <view class="library-meta">格式：{{ item.fileType.toUpperCase() }}</view>
         </view>
-        <button class="doc-open-btn" size="mini" @click="goToDocumentReader(item.id)">阅读</button>
+        <button class="doc-open-btn" size="mini" @click="goToDocumentReader(item.id)">查看</button>
       </view>
     </uni-card>
 

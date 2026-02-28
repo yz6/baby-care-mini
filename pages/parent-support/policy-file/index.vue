@@ -16,7 +16,7 @@
         <view class="policy-title">{{ item.title }}</view>
         <view class="policy-meta">{{ item.category }}</view>
         <view class="action-row">
-          <text class="action-btn" @click="goToReader(item.id)">在线阅读</text>
+          <text class="action-btn" @click="goToReader(item.id)">查看</text>
           <text class="action-btn" @click="showMockTip('下载成功（mock）')">下载</text>
           <text class="action-btn" @click="handleCollectToggle(item.id)">{{ item.collect ? "已收藏" : "收藏" }}</text>
         </view>

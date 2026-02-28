@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <UniPageHead title="政策在线阅读" :showBack="true" backFallbackUrl="/pages/parent-support/policy-file/index" :compact="isPageHeadCompact" />
+    <UniPageHead title="政策查看" :showBack="true" backFallbackUrl="/pages/parent-support/policy-file/index" :compact="isPageHeadCompact" />
 
     <uni-card title="政策内容" :is-shadow="false">
       <view class="title-text">{{ currentPolicy.title }}</view>

@@ -1,6 +1,6 @@
 <template>
   <PageContainer>
-    <UniPageHead title="文档阅读" :showBack="true" backFallbackUrl="/pages/parent-support/parenting-library/index" :compact="isPageHeadCompact" />
+    <UniPageHead title="文档查看" :showBack="true" backFallbackUrl="/pages/parent-support/parenting-library/index" :compact="isPageHeadCompact" />
 
     <uni-card title="文档信息" :is-shadow="false">
       <view class="doc-title">{{ currentDocument.title }}</view>
@@ -19,9 +19,7 @@ import { usePageHeadCompact } from "../../../composables/usePageHeadCompact";
 import { parentingLibraryDocuments } from "../../../mock/parent-support";
 import type { ParentingLibraryDocumentItem } from "../../../types/parent-support";
 
-declare const onLoad:
-  | ((callback: (query: Record<string, string | undefined>) => void) => void)
-  | undefined;
+declare const onLoad: ((callback: (query: Record<string, string | undefined>) => void) => void) | undefined;
 
 const { isPageHeadCompact } = usePageHeadCompact();
 const documentId = ref("");

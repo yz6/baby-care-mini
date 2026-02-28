@@ -11,13 +11,13 @@
 
     <uni-card title="育儿文库" :is-shadow="false">
       <view class="library-doc-section">
-        <view class="library-doc-section-title">文档阅读</view>
+        <view class="library-doc-section-title">文档查看</view>
         <view class="library-doc-item" v-for="item in parentingLibraryDocuments" :key="item.id">
           <view class="library-doc-main">
             <view class="library-doc-title">{{ item.title }}</view>
             <view class="library-meta">格式：{{ item.fileType.toUpperCase() }}</view>
           </view>
-          <button class="library-doc-btn" size="mini" @click="handleOpenLibraryDocument(item)">在线阅读</button>
+          <button class="library-doc-btn" size="mini" @click="handleOpenLibraryDocument(item)">查看</button>
         </view>
       </view>
       <view class="segment-row">
@@ -47,7 +47,7 @@
           <view class="policy-meta">{{ item.category }}</view>
         </view>
         <view class="policy-actions">
-          <text class="policy-btn" @click="showMockTip('在线阅读（mock）')">阅读</text>
+          <text class="policy-btn" @click="showMockTip('查看（mock）')">查看</text>
           <text class="policy-btn" @click="showMockTip('开始下载（mock）')">下载</text>
           <text class="policy-btn" @click="handlePolicyCollect(item.id)">{{ item.collect ? "已收藏" : "收藏" }}</text>
         </view>
